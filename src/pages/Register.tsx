@@ -86,17 +86,17 @@ function Register() {
                     </div>
 
                     {/* Contenedor del Formulario */}
-                    <div className="w-full max-w-md mx-auto flex flex-col justify-center min-h-[80vh] md:min-h-0">
+                    <div className="w-full max-w-sm md:max-w-md mx-auto flex flex-col justify-center min-h-[75vh] md:min-h-0 px-4 sm:px-0">
 
                         {/* Logo en Móvil con fondo difuminado */}
-                        <Link to="/" className="md:hidden relative flex items-center gap-3 mb-12 justify-center hover:opacity-80 transition-opacity">
-                            <div className="absolute inset-0 bg-black/60 blur-[40px] rounded-full scale-[2.5] -z-10"></div>
-                            <img src="logo.svg" alt="GameFind Logo" className="h-16 w-auto relative z-10" />
+                        <Link to="/" className="md:hidden relative flex items-center gap-3 mb-10 justify-center hover:opacity-80 transition-opacity">
+                            <div className="absolute inset-0 bg-black/60 blur-[30px] rounded-full scale-[2] -z-10"></div>
+                            <img src="logo.svg" alt="GameFind Logo" className="h-12 w-auto relative z-10" />
                         </Link>
 
-                        <div className="mb-8 text-left">
-                            <h2 className="text-4xl font-bold mb-3 tracking-tight uppercase text-white">REGISTRARSE</h2>
-                            <p className="text-gray-400 text-base">Regístrate para comparar y guardar tus juegos</p>
+                        <div className="mb-8 text-center md:text-left">
+                            <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight uppercase text-white">REGISTRARSE</h2>
+                            <p className="text-gray-400 text-sm md:text-base">Regístrate para comparar y guardar tus juegos</p>
                         </div>
 
                         <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>

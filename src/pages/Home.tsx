@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom'
 
 /**
  * Componente de la página de Inicio (Home).
- * Refactorizado para mantener la coherencia visual premium con la página de Login.
+ * Optimizado para Responsive Nivel Senior.
  */
 function Home() {
-    // Datos mock para las ofertas destacadas
     const featuredGames = [
         { id: 1, title: 'Elden Ring', price: '$39.99', image: 'https://image.api.playstation.com/vulcan/ap/rnd/202110/2000/aajm8sYv98YpMp69lS6Oao0N.png', platform: 'Steam' },
         { id: 2, title: 'Cyberpunk 2077', price: '$29.99', image: 'https://cdn.cdprojektred.com/keyart/cyberpunk/cyberpunk-2077-ultimate-edition-keyart-en.jpg', platform: 'GOG' },
@@ -14,107 +13,96 @@ function Home() {
     ]
 
     return (
-        <div className="min-h-screen w-full bg-[#0c061a] text-white font-sans selection:bg-cyan-500/30">
-
-            {/* --- FONDO DECORATIVO (Coherencia con Login) --- */}
+        <div className="min-h-screen w-full bg-[#0c061a] text-white font-sans selection:bg-cyan-500/30 overflow-x-hidden">
+            
+            {/* --- FONDO DECORATIVO --- */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-                {/* Planeta Grande (Cian) */}
-                <div className="absolute -top-[10%] -left-[5%] w-[40vw] h-[40vw] min-w-[400px] rounded-full bg-gradient-to-br from-[#00f0ff]/10 via-[#0055ff]/5 to-transparent blur-3xl opacity-60"></div>
-                {/* Planeta Pequeño (Púrpura) */}
-                <div className="absolute top-[60%] -right-[5%] w-[30vw] h-[30vw] min-w-[300px] rounded-full bg-gradient-to-br from-[#d946ef]/10 via-[#581c87]/5 to-transparent blur-3xl opacity-50"></div>
-
-                {/* Estrellas Distantes */}
-                <div className="absolute top-[20%] left-[30%] w-1 h-1 bg-white rounded-full shadow-[0_0_8px_white] opacity-40"></div>
-                <div className="absolute top-[70%] left-[60%] w-1.5 h-1.5 bg-cyan-200 rounded-full shadow-[0_0_10px_cyan] opacity-30"></div>
-                <div className="absolute top-[40%] right-[20%] w-1 h-1 bg-purple-300 rounded-full shadow-[0_0_8px_purple] opacity-40"></div>
+                <div className="absolute -top-[5%] -left-[10%] w-[80vw] md:w-[40vw] h-[80vw] md:h-[40vw] rounded-full bg-gradient-to-br from-[#00f0ff]/10 to-transparent blur-3xl opacity-60"></div>
+                <div className="absolute bottom-[5%] -right-[10%] w-[60vw] md:w-[30vw] h-[60vw] md:h-[30vw] rounded-full bg-gradient-to-br from-[#d946ef]/10 to-transparent blur-3xl opacity-50"></div>
             </div>
 
-            {/* --- NAVBAR (Sticky, Transparent & Standard Layout) --- */}
-            <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-8 md:px-12 bg-transparent">
+            {/* --- NAVBAR --- */}
+            <nav className="sticky top-0 z-50 flex items-center justify-between px-4 md:px-12 py-5 md:py-8 bg-[#0c061a]/80 backdrop-blur-lg">
                 <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-                    <img src="logo.svg" alt="GameFind" className="h-10 w-auto" />
+                    <img src="logo.svg" alt="GameFind" className="h-8 md:h-10 w-auto" />
                 </Link>
-                <div className="flex items-center gap-6">
-                    <Link to="/login" className="px-6 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-medium">
-                        Iniciar Sesión
+                <div className="flex items-center gap-3 md:gap-6">
+                    <Link to="/login" className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-lg md:rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-medium">
+                        Entrar
                     </Link>
-                    <Link to="/register" className="px-6 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] transition-all font-bold">
+                    <Link to="/register" className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-lg md:rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 font-bold shadow-lg shadow-purple-500/20">
                         Registrarse
                     </Link>
                 </div>
             </nav>
 
             {/* --- HERO SECTION --- */}
-            <header className="relative z-10 pt-20 pb-16 px-6 text-center max-w-5xl mx-auto">
-                <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight animate-fade">
-                    ENCUENTRA TU PRÓXIMO <br />
+            <header className="relative z-10 pt-12 md:pt-24 pb-12 md:pb-20 px-6 text-center max-w-5xl mx-auto">
+                <h1 className="text-3xl sm:text-4xl md:text-7xl font-black mb-6 leading-tight uppercase">
+                    TU PRÓXIMA <br className="hidden sm:block" />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-[length:200%_auto] animate-[gradient_4s_linear_infinite]">
-                        JUEGO AL MEJOR PRECIO
-                    </span>
+                        AVENTURA GAMER
+                    </span> <br className="hidden sm:block" />
+                    AL MEJOR PRECIO
                 </h1>
-                <p className="text-purple-200/70 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-medium">
-                    Comparamos miles de tiendas para que tú solo te preocupes de jugar.
-                    Simple, rápido y sin trampas.
+                <p className="text-purple-200/60 text-sm md:text-lg max-w-xl mx-auto mb-10 md:mb-14 font-medium px-4">
+                    Comparamos miles de tiendas para que tú solo te preocupes de jugar. 
+                    Simple, rápido y 100% gratuito.
                 </p>
 
-                {/* Buscador Estilizado */}
-                <div className="relative max-w-3xl mx-auto group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                    <div className="relative flex items-center bg-[#150c2b]/80 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-                        <div className="pl-6 text-purple-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                {/* Buscador Estilo Píldora Premium */}
+                <div className="relative max-w-2xl mx-auto group px-4 md:px-0">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full blur opacity-15 group-focus-within:opacity-30 transition-opacity"></div>
+                    <div className="relative flex items-center bg-[#150c2b]/90 backdrop-blur-2xl border border-white/10 rounded-full p-1.5 md:p-2 shadow-2xl">
+                        <div className="hidden sm:flex pl-4 text-purple-400/50">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                         </div>
-                        <input
-                            type="text"
-                            placeholder="Busca tu juego favorito (ej: Elden Ring, FIFA 24...)"
-                            className="w-full bg-transparent px-6 py-5 text-white outline-none placeholder:text-gray-500 font-medium"
+                        <input 
+                            type="text" 
+                            placeholder="¿Qué quieres jugar hoy?" 
+                            className="w-full bg-transparent px-4 md:px-6 py-2.5 md:py-3.5 text-white outline-none placeholder:text-gray-500 text-sm md:text-base font-medium"
                         />
-                        <button className="bg-gradient-to-r from-purple-600 to-blue-600 px-10 py-5 font-bold hover:brightness-110 transition-all uppercase tracking-wider">
-                            Buscar
+                        <button className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 md:px-10 py-2.5 md:py-3.5 font-black hover:brightness-110 transition-all rounded-full text-[10px] md:text-xs tracking-widest shadow-xl shadow-purple-500/20 active:scale-95 whitespace-nowrap">
+                            BUSCAR
                         </button>
                     </div>
                 </div>
             </header>
 
             {/* --- SECCIÓN DE OFERTAS --- */}
-            <main className="relative z-10 container mx-auto px-6 py-20">
-                <div className="flex justify-between items-end mb-12">
-                    <div>
-                        <h2 className="text-3xl font-bold mb-2">Ofertas del Momento</h2>
-                        <div className="h-1 w-20 bg-cyan-500 rounded-full"></div>
+            <main className="relative z-10 container mx-auto px-6 py-10 md:py-20">
+                <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4 mb-10 md:mb-16">
+                    <div className="text-center sm:text-left">
+                        <h2 className="text-2xl md:text-3xl font-bold mb-2 uppercase tracking-tight">OFERTAS TOP</h2>
+                        <div className="h-1 w-16 md:w-20 bg-cyan-500 rounded-full mx-auto sm:mx-0"></div>
                     </div>
-                    <a href="#" className="text-cyan-400 hover:text-white transition-colors font-semibold flex items-center gap-2">
-                        Ver todas las ofertas
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" x2="19" y2="12" y1="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    <a href="#" className="text-cyan-400 hover:text-white transition-colors text-sm font-bold flex items-center gap-2">
+                        VER TODAS
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </a>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                     {featuredGames.map(game => (
                         <div key={game.id} className="group relative">
-                            {/* Glow effect on hover */}
-                            <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
-
-                            <div className="relative bg-[#150c2b]/60 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition-all duration-500 hover:-translate-y-2 shadow-2xl">
-                                <div className="h-56 overflow-hidden relative">
-                                    <img
-                                        src={game.image}
-                                        alt={game.title}
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur opacity-0 group-hover:opacity-15 transition duration-500"></div>
+                            
+                            <div className="relative bg-[#150c2b]/60 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2">
+                                <div className="h-48 md:h-56 overflow-hidden relative">
+                                    <img 
+                                        src={game.image} 
+                                        alt={game.title} 
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#150c2b] to-transparent opacity-60"></div>
-                                    <span className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold border border-white/10 uppercase tracking-widest text-cyan-400">
+                                    <span className="absolute top-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg text-[10px] font-bold border border-white/10 text-cyan-400 uppercase tracking-widest">
                                         {game.platform}
                                     </span>
                                 </div>
-                                <div className="p-6">
-                                    <h3 className="text-xl font-bold mb-4 group-hover:text-cyan-400 transition-colors">{game.title}</h3>
-                                    <div className="flex justify-between items-center">
-                                        <div className="flex flex-col">
-                                            <span className="text-gray-400 text-xs uppercase font-bold tracking-tighter">Mejor precio</span>
-                                            <span className="text-3xl font-black text-white">{game.price}</span>
-                                        </div>
-                                        <button className="bg-white/5 hover:bg-cyan-500 text-white px-6 py-2.5 rounded-xl font-bold border border-white/10 hover:border-cyan-400 transition-all active:scale-95">
+                                <div className="p-5 md:p-6 text-center sm:text-left">
+                                    <h3 className="text-lg md:text-xl font-bold mb-4 group-hover:text-cyan-400 transition-colors">{game.title}</h3>
+                                    <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+                                        <span className="text-2xl md:text-3xl font-black text-white">{game.price}</span>
+                                        <button className="w-full sm:w-auto bg-white/5 hover:bg-cyan-500 px-6 py-2.5 rounded-xl font-bold border border-white/10 transition-all text-sm uppercase">
                                             Comparar
                                         </button>
                                     </div>
@@ -125,11 +113,13 @@ function Home() {
                 </div>
             </main>
 
-            {/* --- FOOTER (Centered & Clean) --- */}
-            <footer className="relative z-10 py-12 px-6 bg-black/20 backdrop-blur-lg">
-                <div className="container mx-auto flex flex-col items-center justify-center text-center gap-6">
-                    <img src="logo.svg" alt="GameFind" className="h-8 w-auto opacity-50" />
-                    <p className="text-gray-500 text-sm">© 2026 GameFind. Hecho para gamers.</p>
+            {/* --- FOOTER --- */}
+            <footer className="relative z-10 py-12 px-6 bg-black/40 backdrop-blur-xl">
+                <div className="container mx-auto flex flex-col items-center gap-6 text-center">
+                    <img src="logo.svg" alt="GameFind" className="h-7 w-auto opacity-30" />
+                    <p className="text-gray-500 text-[10px] md:text-xs uppercase tracking-widest font-medium">
+                        © 2026 GameFind • PRECIOS ACTUALIZADOS • SIN TRAMPAS
+                    </p>
                 </div>
             </footer>
         </div>
