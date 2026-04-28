@@ -71,17 +71,10 @@ function Register() {
                 <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col relative bg-transparent md:bg-[#150c2b] justify-center items-center">
 
                     {/* Enlace de Login (Arriba a la derecha) */}
-                    <div className="absolute top-6 right-6 md:top-10 md:right-12 flex items-center gap-4 z-20">
-                        <span className="text-sm text-gray-400 font-medium hidden sm:block">¿Ya tienes cuenta?</span>
-                        <Link to="/login" className="relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-purple-300 transition-all duration-300 bg-purple-900/10 border border-purple-500/30 rounded-xl hover:bg-purple-900/20 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.15)] group overflow-hidden backdrop-blur-sm">
-                            <span className="relative z-10 group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-                                Inicia sesión
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                                    <path d="M5 12h14"></path>
-                                    <path d="m12 5 7 7-7 7"></path>
-                                </svg>
-                            </span>
-                            <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out"></div>
+                    <div className="absolute top-4 right-4 md:top-10 md:right-12 flex items-center gap-4 z-20">
+                        <span className="text-xs text-gray-400 font-medium hidden sm:block">¿Ya tienes cuenta?</span>
+                        <Link to="/login" className="relative inline-flex items-center justify-center px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-bold text-purple-300 transition-all duration-300 bg-purple-900/10 border border-purple-500/30 rounded-xl hover:bg-purple-900/20 hover:border-cyan-400/50 backdrop-blur-sm">
+                            Inicia sesión
                         </Link>
                     </div>
 
