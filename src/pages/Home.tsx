@@ -32,7 +32,7 @@ function Home() {
             {/* --- NAVBAR (Sticky, Transparent & Standard Layout) --- */}
             <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-8 md:px-12 bg-transparent">
                 <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-                    <img src="/logo.svg" alt="GameFind" className="h-10 w-auto" />
+                    <img src="logo.svg" alt="GameFind" className="h-10 w-auto" />
                 </Link>
                 <div className="flex items-center gap-6">
                     <Link to="/login" className="px-6 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-medium">
@@ -128,7 +128,7 @@ function Home() {
             {/* --- FOOTER (Centered & Clean) --- */}
             <footer className="relative z-10 py-12 px-6 bg-black/20 backdrop-blur-lg">
                 <div className="container mx-auto flex flex-col items-center justify-center text-center gap-6">
-                    <img src="/logo.svg" alt="GameFind" className="h-8 w-auto opacity-50" />
+                    <img src="logo.svg" alt="GameFind" className="h-8 w-auto opacity-50" />
                     <p className="text-gray-500 text-sm">© 2026 GameFind. Hecho para gamers.</p>
                 </div>
             </footer>
