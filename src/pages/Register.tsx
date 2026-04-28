@@ -2,23 +2,21 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 /**
- * Componente de la página de Login.
- * Implementado siguiendo fielmente el diseño premium proporcionado en login.html.
+ * Componente de la página de Registro.
+ * Mantiene la coherencia visual premium con el Login pero adaptado para nuevos usuarios.
  */
-function Login() {
+function Register() {
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-[#120a26] font-sans text-white antialiased overflow-x-hidden">
+        <div className="min-h-screen w-full flex items-center justify-center bg-[#0c061a] font-sans text-white antialiased overflow-x-hidden">
 
             {/* Main Container: 100% ancho y alto en desktop */}
             <div className="flex flex-col md:flex-row w-full min-h-screen md:h-screen bg-[#0c061a] overflow-hidden relative z-10">
 
                 {/* Fondo Decorativo Global para Móvil (Planetas con alta visibilidad) */}
                 <div className="md:hidden absolute inset-0 pointer-events-none overflow-hidden">
-                    {/* Planeta Grande Superior - Más sólido */}
                     <div className="absolute -top-[5%] -left-[15%] w-[90vw] h-[90vw] rounded-full bg-gradient-to-br from-[#00f0ff]/40 via-[#0055ff]/20 to-transparent blur-xl">
                         <div className="absolute inset-[15%] rounded-full border-t-[5px] border-white/30 rotate-45"></div>
                     </div>
-                    {/* Planeta Pequeño Inferior - Más sólido */}
                     <div className="absolute bottom-[10%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-[#d946ef]/40 to-[#581c87]/20 shadow-[0_0_50px_rgba(217,70,239,0.2)]"></div>
                 </div>
 
@@ -50,7 +48,6 @@ function Login() {
                     </div>
 
                     <Link to="/" className="relative z-10 flex items-center gap-3 hover:opacity-80 transition-opacity group">
-                        {/* Fondo difuminado sin bordes (acabado orgánico) */}
                         <div className="absolute inset-0 bg-black/60 blur-[60px] rounded-full scale-[2.5] -z-10"></div>
                         <img src="/logo.svg" alt="GameFind Logo" className="h-16 w-auto relative z-10" />
                     </Link>
@@ -58,14 +55,14 @@ function Login() {
                     {/* Texto de Bienvenida Hero */}
                     <div className="relative z-10 mb-4 xl:mb-8 text-left">
                         <h1 className="text-5xl xl:text-6xl font-black text-white leading-[1.1] mb-4 drop-shadow-2xl uppercase">
-                            ¡ENCUENTRA <br />
-                            TU PRÓXIMA <br />
+                            ÚNETE A LA <br />
+                            MAYOR <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
-                                AVENTURA!
+                                COMUNIDAD!
                             </span>
                         </h1>
                         <p className="text-purple-200 text-base max-w-sm font-medium">
-                            Compara precios en todas las tiendas y consigue tus videojuegos favoritos al mejor costo.
+                            Crea tu cuenta gratis y empieza a ahorrar en tus videojuegos favoritos hoy mismo.
                         </p>
                     </div>
                 </div>
@@ -73,13 +70,13 @@ function Login() {
                 {/* Panel Derecho - Formulario */}
                 <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col relative bg-transparent md:bg-[#150c2b] justify-center items-center">
 
-                    {/* Enlace de Registro (Arriba a la derecha) */}
+                    {/* Enlace de Login (Arriba a la derecha) */}
                     <div className="absolute top-6 right-6 md:top-10 md:right-12 flex items-center gap-4 z-20">
-                        <span className="text-sm text-gray-400 font-medium hidden sm:block">¿No tienes una cuenta?</span>
-                        <Link to="/register" className="relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-purple-300 transition-all duration-300 bg-purple-900/10 border border-purple-500/30 rounded-xl hover:bg-purple-900/20 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.15)] group overflow-hidden backdrop-blur-sm">
+                        <span className="text-sm text-gray-400 font-medium hidden sm:block">¿Ya tienes cuenta?</span>
+                        <Link to="/login" className="relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-purple-300 transition-all duration-300 bg-purple-900/10 border border-purple-500/30 rounded-xl hover:bg-purple-900/20 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.15)] group overflow-hidden backdrop-blur-sm">
                             <span className="relative z-10 group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-                                Regístrate
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+                                Inicia sesión
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
                                     <path d="M5 12h14"></path>
                                     <path d="m12 5 7 7-7 7"></path>
                                 </svg>
@@ -97,17 +94,30 @@ function Login() {
                             <img src="/logo.svg" alt="GameFind Logo" className="h-16 w-auto relative z-10" />
                         </Link>
 
-                        <div className="mb-10 text-left">
-                            <h2 className="text-4xl font-bold mb-3 tracking-tight uppercase">INICIAR SESIÓN</h2>
-                            <p className="text-gray-400 text-base">Ingresa con tu correo electrónico para continuar</p>
+                        <div className="mb-8 text-left">
+                            <h2 className="text-4xl font-bold mb-3 tracking-tight uppercase text-white">REGISTRARSE</h2>
+                            <p className="text-gray-400 text-base">Regístrate para comparar y guardar tus juegos</p>
                         </div>
 
-                        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                        <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+
+                            {/* Input de Nombre*/}
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-cyan-400 text-gray-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                </div>
+                                <input
+                                    type="text"
+                                    className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-cyan-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
+                                    placeholder="Nombre"
+                                    required
+                                />
+                            </div>
 
                             {/* Input de Email */}
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-purple-400 text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round">
                                         <rect width="20" height="16" x="2" y="4" rx="2"></rect>
                                         <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                                     </svg>
@@ -123,7 +133,7 @@ function Login() {
                             {/* Input de Contraseña */}
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-purple-400 text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round">
                                         <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
                                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                     </svg>
@@ -136,19 +146,26 @@ function Login() {
                                 />
                             </div>
 
-                            <div className="flex justify-end">
-                                <a href="#" className="text-sm text-purple-400 hover:text-cyan-400 transition-colors font-medium">
-                                    ¿Olvidaste tu contraseña?
-                                </a>
+                            {/* Input de Confirmar Contraseña */}
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-cyan-400 text-gray-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                </div>
+                                <input
+                                    type="password"
+                                    className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-cyan-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
+                                    placeholder="Confirmar Contraseña"
+                                    required
+                                />
                             </div>
 
                             {/* Botón de Envío */}
                             <button
                                 type="submit"
-                                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-lg rounded-xl py-4 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_15px_25px_rgba(107,33,168,0.5)] flex justify-center items-center gap-2 group mt-2"
+                                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-lg rounded-xl py-4 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_15px_25px_rgba(107,33,168,0.5)] flex justify-center items-center gap-2 group mt-4"
                             >
-                                Iniciar Sesión
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="group-hover:translate-x-1.5 transition-transform">
+                                Registrarse
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1.5 transition-transform">
                                     <path d="M5 12h14"></path>
                                     <path d="m12 5 7 7-7 7"></path>
                                 </svg>
@@ -162,4 +179,4 @@ function Login() {
     )
 }
 
-export default Login
+export default Register
