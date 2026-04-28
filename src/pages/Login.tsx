@@ -9,7 +9,17 @@ function Login() {
         <div className="min-h-screen w-full flex items-center justify-center bg-[#120a26] font-sans text-white antialiased overflow-x-hidden">
 
             {/* Main Container: 100% ancho y alto en desktop */}
-            <div className="flex flex-col md:flex-row w-full min-h-screen md:h-screen bg-[#120a26] overflow-hidden relative z-10">
+            <div className="flex flex-col md:flex-row w-full min-h-screen md:h-screen bg-[#0c061a] overflow-hidden relative z-10">
+
+                {/* Fondo Decorativo Global para Móvil (Planetas con alta visibilidad) */}
+                <div className="md:hidden absolute inset-0 pointer-events-none overflow-hidden">
+                    {/* Planeta Grande Superior - Más sólido */}
+                    <div className="absolute -top-[5%] -left-[15%] w-[90vw] h-[90vw] rounded-full bg-gradient-to-br from-[#00f0ff]/40 via-[#0055ff]/20 to-transparent blur-xl">
+                        <div className="absolute inset-[15%] rounded-full border-t-[5px] border-white/30 rotate-45"></div>
+                    </div>
+                    {/* Planeta Pequeño Inferior - Más sólido */}
+                    <div className="absolute bottom-[10%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-[#d946ef]/40 to-[#581c87]/20 shadow-[0_0_50px_rgba(217,70,239,0.2)]"></div>
+                </div>
 
                 {/* Panel Izquierdo - Visual/Brand (Oculto en móvil) */}
                 <div className="hidden md:flex w-1/2 relative p-12 xl:p-24 flex-col justify-between overflow-hidden bg-[#0c061a]">
@@ -60,7 +70,7 @@ function Login() {
                 </div>
 
                 {/* Panel Derecho - Formulario */}
-                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-[#150c2b] relative">
+                <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col relative bg-transparent md:bg-[#150c2b] justify-center items-center">
 
                     {/* Enlace de Registro (Arriba a la derecha) */}
                     <div className="absolute top-6 right-6 md:top-10 md:right-12 flex items-center gap-4 z-20">
@@ -78,12 +88,12 @@ function Login() {
                     </div>
 
                     {/* Contenedor del Formulario */}
-                    <div className="w-full max-w-md mx-auto mt-16 md:mt-0">
+                    <div className="w-full max-w-md mx-auto flex flex-col justify-center min-h-[80vh] md:min-h-0">
 
                         {/* Logo en Móvil con fondo difuminado */}
-                        <div className="md:hidden relative flex items-center gap-3 mb-10 justify-center">
-                            <div className="absolute inset-0 bg-black/60 blur-[40px] rounded-full scale-[2] -z-10"></div>
-                            <img src="/logo.svg" alt="GameFind Logo" className="h-12 w-auto relative z-10" />
+                        <div className="md:hidden relative flex items-center gap-3 mb-12 justify-center">
+                            <div className="absolute inset-0 bg-black/60 blur-[40px] rounded-full scale-[2.5] -z-10"></div>
+                            <img src="/logo.svg" alt="GameFind Logo" className="h-16 w-auto relative z-10" />
                         </div>
 
                         <div className="mb-10 text-left">
