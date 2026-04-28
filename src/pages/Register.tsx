@@ -70,12 +70,21 @@ function Register() {
                 {/* Panel Derecho - Formulario */}
                 <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col relative bg-transparent md:bg-[#150c2b] justify-center items-center">
 
-                    {/* Enlace de Login (Arriba a la derecha) */}
-                    <div className="absolute top-4 right-4 md:top-10 md:right-12 flex items-center gap-4 z-20">
-                        <span className="text-sm text-gray-400 font-medium hidden sm:block">¿Ya tienes cuenta?</span>
-                        <Link to="/login" className="relative inline-flex items-center justify-center px-5 md:px-6 py-2.5 text-sm font-bold text-purple-300 transition-all duration-300 bg-purple-900/10 border border-purple-500/30 rounded-xl hover:bg-purple-900/20 hover:border-cyan-400/50 backdrop-blur-sm">
-                            Inicia sesión
+                    {/* Barra Superior (Volver + Acción) */}
+                    <div className="absolute top-4 left-4 right-4 md:top-10 md:left-12 md:right-12 flex justify-between items-center z-20">
+                        {/* Botón Volver */}
+                        <Link to="/" className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-white transition-colors group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            <span>Volver</span>
                         </Link>
+
+                        {/* Enlace de Login */}
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm text-gray-400 font-medium hidden sm:block">¿Ya tienes cuenta?</span>
+                            <Link to="/login" className="relative inline-flex items-center justify-center px-5 md:px-6 py-2.5 text-sm font-bold text-purple-300 transition-all duration-300 bg-purple-900/10 border border-purple-500/30 rounded-xl hover:bg-purple-900/20 hover:border-cyan-400/50 backdrop-blur-sm">
+                                Inicia sesión
+                            </Link>
+                        </div>
                     </div>
 
                     {/* Contenedor del Formulario */}

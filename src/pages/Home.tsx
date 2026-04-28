@@ -21,8 +21,8 @@ function Home() {
                 <div className="absolute bottom-[5%] -right-[10%] w-[60vw] md:w-[30vw] h-[60vw] md:h-[30vw] rounded-full bg-gradient-to-br from-[#d946ef]/10 to-transparent blur-3xl opacity-50"></div>
             </div>
 
-            {/* --- NAVBAR --- */}
-            <nav className="sticky top-0 z-50 flex items-center justify-between px-4 md:px-12 py-5 md:py-8 bg-[#0c061a]/80 backdrop-blur-lg">
+            {/* --- NAVBAR (Fixed Top) --- */}
+            <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-12 py-5 bg-[#0c061a]/90 backdrop-blur-xl border-b border-white/5">
                 <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
                     <img src="logo.svg" alt="GameFind" className="h-8 md:h-10 w-auto" />
                 </Link>
@@ -35,6 +35,9 @@ function Home() {
                     </Link>
                 </div>
             </nav>
+
+            {/* Ajuste de espacio para compensar el Fixed Header */}
+            <div className="h-20 md:h-28"></div>
 
             {/* --- HERO SECTION --- */}
             <header className="relative z-10 pt-12 md:pt-24 pb-12 md:pb-20 px-6 text-center max-w-5xl mx-auto">
@@ -118,7 +121,7 @@ function Home() {
                 <div className="container mx-auto flex flex-col items-center gap-6 text-center">
                     <img src="logo.svg" alt="GameFind" className="h-7 w-auto opacity-30" />
                     <p className="text-gray-500 text-[10px] md:text-xs uppercase tracking-widest font-medium">
-                        © 2026 GameFind • PRECIOS ACTUALIZADOS • SIN TRAMPAS
+                        © 2026 GameFind • PRECIOS ACTUALIZADOS
                     </p>
                 </div>
             </footer>
