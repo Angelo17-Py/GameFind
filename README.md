@@ -1,0 +1,1 @@
+GameFind es una aplicación web desarrollada con Java Spring Boot que permite buscar y comparar precios de videojuegos digitales en múltiples tiendas como Steam, Epic Games y GOG. El sistema centraliza la información y muestra la mejor oferta disponible, optimizando el tiempo del usuario y facilitando la toma de decisiones de compra.
