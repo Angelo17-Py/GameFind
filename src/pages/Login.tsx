@@ -75,19 +75,19 @@ function Login() {
 
                     {/* Enlace de Registro (Arriba a la derecha) */}
                     <div className="absolute top-4 right-4 md:top-10 md:right-12 flex items-center gap-4 z-20">
-                        <span className="text-xs text-gray-400 font-medium hidden sm:block">¿No tienes cuenta?</span>
-                        <Link to="/register" className="relative inline-flex items-center justify-center px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-bold text-purple-300 transition-all duration-300 bg-purple-900/10 border border-purple-500/30 rounded-xl hover:bg-purple-900/20 hover:border-cyan-400/50 backdrop-blur-sm">
+                        <span className="text-sm text-gray-400 font-medium hidden sm:block">¿No tienes cuenta?</span>
+                        <Link to="/register" className="relative inline-flex items-center justify-center px-5 md:px-6 py-2.5 text-sm font-bold text-purple-300 transition-all duration-300 bg-purple-900/10 border border-purple-500/30 rounded-xl hover:bg-purple-900/20 hover:border-cyan-400/50 backdrop-blur-sm">
                             Regístrate
                         </Link>
                     </div>
 
                     {/* Contenedor del Formulario */}
-                    <div className="w-full max-w-sm md:max-w-md mx-auto flex flex-col justify-center min-h-[85vh] md:min-h-0 px-4 sm:px-0 pt-20 md:pt-0">
+                    <div className="w-full max-w-sm md:max-w-md mx-auto flex flex-col justify-center min-h-[85vh] md:min-h-0 px-4 sm:px-0 pt-12 md:pt-0">
 
                         {/* Logo en Móvil con fondo difuminado */}
-                        <Link to="/" className="md:hidden relative flex items-center gap-3 mb-12 justify-center hover:opacity-80 transition-opacity">
+                        <Link to="/" className="md:hidden relative flex items-center gap-3 mb-10 justify-center hover:opacity-80 transition-opacity">
                             <div className="absolute inset-0 bg-black/60 blur-[30px] rounded-full scale-[2] -z-10"></div>
-                            <img src="logo.svg" alt="GameFind Logo" className="h-10 w-auto relative z-10" />
+                            <img src="logo.svg" alt="GameFind Logo" className="h-11 w-auto relative z-10" />
                         </Link>
 
                         <div className="mb-8 text-center md:text-left">
