@@ -11,13 +11,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Ruta principal: Landing Page */}
         <Route path="/" element={<Home />} />
-        
-        {/* Ruta de Login: Implementada según diseño proporcionado */}
         <Route path="/login" element={<Login />} />
-
-        {/* Ruta de Register: Implementada según diseño proporcionado */}
         <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
