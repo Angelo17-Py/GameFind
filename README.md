@@ -7,30 +7,29 @@
 Para comenzar a trabajar en el proyecto, sigue estos pasos en tu terminal:
 
 ### 1. Clonar el Repositorio
+
 ```bash
 git clone https://github.com/Angelo17-Py/GameFind.git
 ```
 
 ### 2. Entrar al Directorio
+
 ```bash
 cd GameFind
 ```
 
 ### 3. Instalación de Dependencias
+
 ```bash
 npm install
 ```
 
 ### 4. Servidor de Desarrollo
+
 Para levantar el proyecto localmente con Hot Module Replacement (HMR):
+
 ```bash
 npm run dev
-```
-
-### 5. Construcción para Producción
-Para generar el bundle optimizado en la carpeta `dist/`:
-```bash
-npm run build
 ```
 
 ---
@@ -45,16 +44,8 @@ npm run build
 
 ---
 
-## 🎨 Guía de Estilo y Diseño
-
-En GameFind, la **estética es una prioridad**. Queremos que el usuario se sienta en una plataforma de última generación.
-
-### Principios de Diseño:
-- **Rich Aesthetics:** Usamos degradados suaves, glassmorphism (efecto cristal) y sombras profundas.
-- **Micro-animaciones:** Cada interacción (hover, click, carga) debe tener una transición fluida.
-- **Modo Oscuro:** El diseño base es oscuro con acentos vibrantes (neón).
-
 ### Estructura de Archivos:
+
 - `src/components/`: Componentes reutilizables.
 - `src/pages/`: Vistas principales de la aplicación.
 - `src/index.css`: Configuración de Tailwind y variables globales.
