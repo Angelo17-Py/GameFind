@@ -52,7 +52,7 @@ function Login() {
                     <Link to="/" className="relative z-10 flex items-center gap-3 hover:opacity-80 transition-opacity group">
                         {/* Fondo difuminado sin bordes (acabado orgánico) */}
                         <div className="absolute inset-0 bg-black/60 blur-[60px] rounded-full scale-[2.5] -z-10"></div>
-                        <img src="/logo.svg" alt="GameFind Logo" className="h-16 w-auto relative z-10" />
+                        <img src="logo.svg" alt="GameFind Logo" className="h-16 w-auto relative z-10" />
                     </Link>
 
                     {/* Texto de Bienvenida Hero */}
@@ -94,7 +94,7 @@ function Login() {
                         {/* Logo en Móvil con fondo difuminado */}
                         <Link to="/" className="md:hidden relative flex items-center gap-3 mb-12 justify-center hover:opacity-80 transition-opacity">
                             <div className="absolute inset-0 bg-black/60 blur-[40px] rounded-full scale-[2.5] -z-10"></div>
-                            <img src="/logo.svg" alt="GameFind Logo" className="h-16 w-auto relative z-10" />
+                            <img src="logo.svg" alt="GameFind Logo" className="h-16 w-auto relative z-10" />
                         </Link>
 
                         <div className="mb-10 text-left">
