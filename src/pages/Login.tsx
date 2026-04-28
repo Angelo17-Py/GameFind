@@ -163,7 +163,7 @@ function Login() {
 
                   {/* Texto Legal de Pie */}
                   <div className="mt-10 text-center text-sm text-gray-500">
-                      Al registrarte aceptas nuestros <a href="#" className="text-purple-400 hover:text-cyan-400 transition-colors hover:underline">Términos</a> y <a href="#" class="text-purple-400 hover:text-cyan-400 transition-colors hover:underline">Condiciones de Privacidad</a>
+                      Al registrarte aceptas nuestros <a href="#" className="text-purple-400 hover:text-cyan-400 transition-colors hover:underline">Términos</a> y <a href="#" className="text-purple-400 hover:text-cyan-400 transition-colors hover:underline">Condiciones de Privacidad</a>
                   </div>
               </div>
 
