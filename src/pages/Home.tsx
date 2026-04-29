@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import type { User } from '@supabase/supabase-js'
 import Navbar from '../components/Navbar'
+import AuthModal from '../components/AuthModal'
 
 /**
  * GameFind: Estructura Original + Motor CheapShark
@@ -16,6 +17,7 @@ function Home() {
     const [loading, setLoading] = useState(false)
     const [selectedStore, setSelectedStore] = useState('1') // Default: Steam (1)
     const [user, setUser] = useState<User | null>(null)
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 
     // Configuración de Tiendas con logos oficiales
     const STORE_MAP: any = {
@@ -147,7 +149,7 @@ function Home() {
 
     const toggleFavorite = async (game: any) => {
         if (!user) {
-            alert('Debes iniciar sesión para guardar favoritos')
+            setIsAuthModalOpen(true)
             return
         }
 
@@ -368,6 +370,12 @@ function Home() {
                     </p>
                 </div>
             </footer>
+
+            {/* Modal de Autenticación */}
+            <AuthModal 
+                isOpen={isAuthModalOpen} 
+                onClose={() => setIsAuthModalOpen(false)} 
+            />
         </div>
     )
 }
