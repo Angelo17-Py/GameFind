@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   // Base path './' asegura que los assets se carguen correctamente en GitHub Pages
-  base: '/GameFind/',
+  base: './',
   plugins: [
     // Habilita el soporte para React
     react(),

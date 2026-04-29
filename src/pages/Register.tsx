@@ -1,11 +1,53 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+import SocialLogin from '../components/SocialLogin'
 
 /**
  * Componente de la página de Registro.
  * Mantiene la coherencia visual premium con el Login pero adaptado para nuevos usuarios.
  */
 function Register() {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const navigate = useNavigate()
+
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setLoading(true)
+        setError(null)
+
+        if (password !== confirmPassword) {
+            setError('Las contraseñas no coinciden')
+            setLoading(false)
+            return
+        }
+
+        try {
+            const { error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: name,
+                    },
+                },
+            })
+
+            if (error) throw error
+            alert('¡Registro exitoso! Por favor verifica tu correo electrónico.')
+            navigate('/login')
+        } catch (err: any) {
+            setError(err.message || 'Error al registrarse')
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <div className="min-h-screen w-full flex items-center justify-center bg-[#0c061a] font-sans text-white antialiased overflow-x-hidden">
 
@@ -49,7 +91,7 @@ function Register() {
 
                     <Link to="/" className="relative z-10 flex items-center gap-3 hover:opacity-80 transition-opacity group">
                         <div className="absolute inset-0 bg-black/60 blur-[60px] rounded-full scale-[2.5] -z-10"></div>
-                        <img src="logo.svg" alt="GameFind Logo" className="h-16 w-auto relative z-10" />
+                        <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="GameFind Logo" className="h-16 w-auto relative z-10" />
                     </Link>
 
                     {/* Texto de Bienvenida Hero */}
@@ -93,7 +135,7 @@ function Register() {
                         {/* Logo en Móvil con fondo difuminado */}
                         <Link to="/" className="md:hidden relative flex items-center gap-3 mb-10 justify-center hover:opacity-80 transition-opacity">
                             <div className="absolute inset-0 bg-black/60 blur-[30px] rounded-full scale-[2] -z-10"></div>
-                            <img src="logo.svg" alt="GameFind Logo" className="h-11 w-auto relative z-10" />
+                            <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="GameFind Logo" className="h-11 w-auto relative z-10" />
                         </Link>
 
                         <div className="mb-8 text-center md:text-left">
@@ -101,7 +143,13 @@ function Register() {
                             <p className="text-gray-400 text-sm md:text-base">Regístrate para comparar y guardar tus juegos</p>
                         </div>
 
-                        <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+                        {error && (
+                            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-sm font-medium">
+                                {error}
+                            </div>
+                        )}
+
+                        <form className="space-y-5" onSubmit={handleRegister}>
 
                             {/* Input de Nombre*/}
                             <div className="relative group">
@@ -110,6 +158,8 @@ function Register() {
                                 </div>
                                 <input
                                     type="text"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                     className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-cyan-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
                                     placeholder="Nombre"
                                     required
@@ -119,13 +169,15 @@ function Register() {
                             {/* Input de Email */}
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-purple-400 text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <rect width="20" height="16" x="2" y="4" rx="2"></rect>
                                         <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                                     </svg>
                                 </div>
                                 <input
                                     type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-purple-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
                                     placeholder="tu_correo@gmail.com"
                                     required
@@ -135,13 +187,15 @@ function Register() {
                             {/* Input de Contraseña */}
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-purple-400 text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
                                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                     </svg>
                                 </div>
                                 <input
                                     type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-purple-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
                                     placeholder="Contraseña"
                                     required
@@ -151,10 +205,12 @@ function Register() {
                             {/* Input de Confirmar Contraseña */}
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-cyan-400 text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                                 </div>
                                 <input
                                     type="password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                     className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-cyan-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
                                     placeholder="Confirmar Contraseña"
                                     required
@@ -164,15 +220,22 @@ function Register() {
                             {/* Botón de Envío */}
                             <button
                                 type="submit"
-                                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-lg rounded-xl py-4 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_15px_25px_rgba(107,33,168,0.5)] flex justify-center items-center gap-2 group mt-4"
+                                disabled={loading}
+                                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-lg rounded-xl py-4 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_15px_25px_rgba(107,33,168,0.5)] flex justify-center items-center gap-2 group mt-4 disabled:opacity-50 disabled:transform-none"
                             >
-                                Registrarse
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1.5 transition-transform">
-                                    <path d="M5 12h14"></path>
-                                    <path d="m12 5 7 7-7 7"></path>
-                                </svg>
+                                {loading ? 'Registrando...' : 'Registrarse'}
+                                {!loading && (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1.5 transition-transform">
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg>
+                                )}
                             </button>
                         </form>
+
+                        <div className="mt-8">
+                            <SocialLogin />
+                        </div>
                     </div>
 
                 </div>

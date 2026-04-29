@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+import type { User } from '@supabase/supabase-js'
+import Navbar from '../components/Navbar'
 
 /**
  * GameFind: Estructura Original + Motor CheapShark
@@ -7,9 +10,12 @@ import { Link } from 'react-router-dom'
  */
 function Home() {
     const [games, setGames] = useState<any[]>([])
+    const [favorites, setFavorites] = useState<string[]>([])
     const [searchTerm, setSearchTerm] = useState('')
+    const [hasSearched, setHasSearched] = useState(false)
     const [loading, setLoading] = useState(false)
     const [selectedStore, setSelectedStore] = useState('1') // Default: Steam (1)
+    const [user, setUser] = useState<User | null>(null)
 
     // Configuración de Tiendas con logos oficiales
     const STORE_MAP: any = {
@@ -85,19 +91,96 @@ function Home() {
         setLoading(false)
     }, [selectedStore])
 
+    // Cargar favoritos de Supabase
+    const fetchFavorites = useCallback(async (userId: string) => {
+        const { data, error } = await supabase
+            .from('favorites')
+            .select('game_id')
+            .eq('user_id', userId)
+        
+        if (error) {
+            console.error('Error fetching favorites:', error)
+        } else {
+            setFavorites(data.map(f => f.game_id))
+        }
+    }, [])
+
     useEffect(() => {
         if (!searchTerm) fetchDeals()
     }, [fetchDeals, searchTerm])
 
+    useEffect(() => {
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            setUser(user)
+            if (user) fetchFavorites(user.id)
+        })
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            const currentUser = session?.user ?? null
+            setUser(currentUser)
+            if (currentUser) {
+                fetchFavorites(currentUser.id)
+            } else {
+                setFavorites([])
+            }
+        })
+
+        return () => subscription.unsubscribe()
+    }, [fetchFavorites])
+
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault()
+        setHasSearched(true)
         fetchDeals(searchTerm)
     }
 
     const handleStoreChange = (id: string) => {
         setSelectedStore(id)
         setSearchTerm('')
+        setHasSearched(false)
         fetchDeals('', id)
+    }
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut()
+    }
+
+    const toggleFavorite = async (game: any) => {
+        if (!user) {
+            alert('Debes iniciar sesión para guardar favoritos')
+            return
+        }
+
+        const isFavorite = favorites.includes(game.id)
+
+        if (isFavorite) {
+            // Eliminar de favoritos
+            const { error } = await supabase
+                .from('favorites')
+                .delete()
+                .eq('user_id', user.id)
+                .eq('game_id', game.id)
+
+            if (!error) {
+                setFavorites(prev => prev.filter(id => id !== game.id))
+            }
+        } else {
+            // Añadir a favoritos
+            const { error } = await supabase
+                .from('favorites')
+                .insert([
+                    { 
+                        user_id: user.id, 
+                        game_id: game.id, 
+                        title: game.title, 
+                        image: game.image 
+                    }
+                ])
+
+            if (!error) {
+                setFavorites(prev => [...prev, game.id])
+            }
+        }
     }
 
     return (
@@ -109,20 +192,7 @@ function Home() {
                 <div className="absolute bottom-[5%] -right-[10%] w-[60vw] md:w-[30vw] h-[60vw] md:h-[30vw] rounded-full bg-gradient-to-br from-[#d946ef]/10 to-transparent blur-3xl opacity-50"></div>
             </div>
 
-            {/* --- NAVBAR --- */}
-            <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-12 py-5 bg-[#0c061a]/90 backdrop-blur-xl border-b border-white/5">
-                <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-                    <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="GameFind" className="h-8 md:h-10 w-auto" />
-                </Link>
-                <div className="flex items-center gap-3 md:gap-6">
-                    <Link to="/login" className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-lg md:rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-medium">
-                        Entrar
-                    </Link>
-                    <Link to="/register" className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-lg md:rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 font-bold shadow-lg shadow-purple-500/20">
-                        Registrarse
-                    </Link>
-                </div>
-            </nav>
+            <Navbar />
 
             <div className="h-20 md:h-28"></div>
 
@@ -163,30 +233,40 @@ function Home() {
 
             {/* --- SECCIÓN DE OFERTAS POR TIENDA --- */}
             <main className="relative z-10 container mx-auto px-6 py-10 md:py-20">
-                <div className="flex flex-col items-center mb-12">
-                    <h2 className="text-2xl md:text-4xl font-black mb-8 uppercase tracking-tighter text-center">
-                        MEJORES OFERTAS <span className="text-cyan-400">POR TIENDA</span>
-                    </h2>
+                {!hasSearched && (
+                    <div className="flex flex-col items-center mb-12">
+                        <h2 className="text-2xl md:text-4xl font-black mb-8 uppercase tracking-tighter text-center">
+                            MEJORES OFERTAS <span className="text-cyan-400">POR TIENDA</span>
+                        </h2>
 
-                    {/* Selector de Tiendas */}
-                    <div className="flex flex-wrap justify-center gap-4">
-                        {Object.entries(STORE_MAP).map(([id, store]: any) => (
-                            <button
-                                key={id}
-                                onClick={() => handleStoreChange(id)}
-                                className={`flex items-center gap-3 px-6 py-3 rounded-2xl border transition-all duration-300 ${selectedStore === id
-                                        ? 'bg-white/10 border-cyan-500 shadow-lg shadow-cyan-500/20 scale-105'
-                                        : 'bg-white/5 border-white/10 hover:border-white/30 grayscale hover:grayscale-0'
-                                    }`}
-                            >
-                                <img src={store.logo} alt={store.name} className="w-5 h-5 object-contain" />
-                                <span className={`text-xs font-black uppercase tracking-widest ${selectedStore === id ? 'text-cyan-400' : 'text-gray-400'}`}>
-                                    {store.name}
-                                </span>
-                            </button>
-                        ))}
+                        {/* Selector de Tiendas */}
+                        <div className="flex flex-wrap justify-center gap-4">
+                            {Object.entries(STORE_MAP).map(([id, store]: any) => (
+                                <button
+                                    key={id}
+                                    onClick={() => handleStoreChange(id)}
+                                    className={`flex items-center gap-3 px-6 py-3 rounded-2xl border transition-all duration-300 ${selectedStore === id
+                                            ? 'bg-white/10 border-cyan-500 shadow-lg shadow-cyan-500/20 scale-105'
+                                            : 'bg-white/5 border-white/10 hover:border-white/30 grayscale hover:grayscale-0'
+                                        }`}
+                                >
+                                    <img src={store.logo} alt={store.name} className="w-5 h-5 object-contain" />
+                                    <span className={`text-xs font-black uppercase tracking-widest ${selectedStore === id ? 'text-cyan-400' : 'text-gray-400'}`}>
+                                        {store.name}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
+
+                {hasSearched && (
+                    <div className="flex justify-center mb-12 text-center">
+                        <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter">
+                            RESULTADOS PARA <span className="text-purple-400">"{searchTerm}"</span>
+                        </h2>
+                    </div>
+                )}
 
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-20 gap-4">
@@ -201,6 +281,31 @@ function Home() {
                                     <div className="h-48 overflow-hidden relative bg-black/40 flex items-center justify-center">
                                         <img src={game.image} className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-20 scale-125" />
                                         <img src={game.image} alt={game.title} className="relative z-10 w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105" />
+                                        
+                                        {/* Botón Favorito */}
+                                        <button 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleFavorite(game);
+                                            }}
+                                            className="absolute top-4 right-4 z-20 p-2.5 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 text-white hover:text-red-500 transition-colors group/fav"
+                                        >
+                                            <svg 
+                                                xmlns="http://www.w3.org/2000/svg" 
+                                                width="20" 
+                                                height="20" 
+                                                viewBox="0 0 24 24" 
+                                                fill={favorites.includes(game.id) ? "currentColor" : "none"} 
+                                                stroke="currentColor" 
+                                                strokeWidth="2.5" 
+                                                strokeLinecap="round" 
+                                                strokeLinejoin="round"
+                                                className={`transition-transform ${favorites.includes(game.id) ? 'text-red-500 scale-110' : 'group-hover/fav:scale-110'}`}
+                                            >
+                                                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                                            </svg>
+                                        </button>
+
                                         {game.metacritic !== "N/A" && (
                                             <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10 text-[10px] font-bold text-yellow-400">
                                                 MC {game.metacritic}
@@ -268,3 +373,5 @@ function Home() {
 }
 
 export default Home
+
+
