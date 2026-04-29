@@ -1,11 +1,39 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+import SocialLogin from '../components/SocialLogin'
 
 /**
  * Componente de la página de Login.
  * Implementado siguiendo fielmente el diseño premium proporcionado en login.html.
  */
 function Login() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const navigate = useNavigate()
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setLoading(true)
+        setError(null)
+
+        try {
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            })
+
+            if (error) throw error
+            navigate('/')
+        } catch (err: any) {
+            setError(err.message || 'Error al iniciar sesión')
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <div className="min-h-screen w-full flex items-center justify-center bg-[#120a26] font-sans text-white antialiased overflow-x-hidden">
 
@@ -52,7 +80,7 @@ function Login() {
                     <Link to="/" className="relative z-10 flex items-center gap-3 hover:opacity-80 transition-opacity group">
                         {/* Fondo difuminado sin bordes (acabado orgánico) */}
                         <div className="absolute inset-0 bg-black/60 blur-[60px] rounded-full scale-[2.5] -z-10"></div>
-                        <img src="logo.svg" alt="GameFind Logo" className="h-16 w-auto relative z-10" />
+                        <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="GameFind Logo" className="h-16 w-auto relative z-10" />
                     </Link>
 
                     {/* Texto de Bienvenida Hero */}
@@ -96,7 +124,7 @@ function Login() {
                         {/* Logo en Móvil con fondo difuminado */}
                         <Link to="/" className="md:hidden relative flex items-center gap-3 mb-10 justify-center hover:opacity-80 transition-opacity">
                             <div className="absolute inset-0 bg-black/60 blur-[30px] rounded-full scale-[2] -z-10"></div>
-                            <img src="logo.svg" alt="GameFind Logo" className="h-11 w-auto relative z-10" />
+                            <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="GameFind Logo" className="h-11 w-auto relative z-10" />
                         </Link>
 
                         <div className="mb-8 text-center md:text-left">
@@ -104,7 +132,13 @@ function Login() {
                             <p className="text-gray-400 text-sm md:text-base">Ingresa con tu correo electrónico para continuar</p>
                         </div>
 
-                        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                        {error && (
+                            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-sm font-medium">
+                                {error}
+                            </div>
+                        )}
+
+                        <form className="space-y-6" onSubmit={handleLogin}>
 
                             {/* Input de Email */}
                             <div className="relative group">
@@ -116,6 +150,8 @@ function Login() {
                                 </div>
                                 <input
                                     type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-purple-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
                                     placeholder="tu_correo@gmail.com"
                                     required
@@ -132,6 +168,8 @@ function Login() {
                                 </div>
                                 <input
                                     type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-purple-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
                                     placeholder="Contraseña"
                                     required
@@ -147,15 +185,22 @@ function Login() {
                             {/* Botón de Envío */}
                             <button
                                 type="submit"
-                                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-lg rounded-xl py-4 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_15px_25px_rgba(107,33,168,0.5)] flex justify-center items-center gap-2 group mt-2"
+                                disabled={loading}
+                                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-lg rounded-xl py-4 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_15px_25px_rgba(107,33,168,0.5)] flex justify-center items-center gap-2 group mt-2 disabled:opacity-50 disabled:transform-none"
                             >
-                                Iniciar Sesión
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="group-hover:translate-x-1.5 transition-transform">
-                                    <path d="M5 12h14"></path>
-                                    <path d="m12 5 7 7-7 7"></path>
-                                </svg>
+                                {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+                                {!loading && (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="group-hover:translate-x-1.5 transition-transform">
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg>
+                                )}
                             </button>
                         </form>
+
+                        <div className="mt-8">
+                            <SocialLogin />
+                        </div>
                     </div>
 
                 </div>
@@ -165,3 +210,4 @@ function Login() {
 }
 
 export default Login
+
