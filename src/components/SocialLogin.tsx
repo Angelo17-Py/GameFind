@@ -9,12 +9,19 @@ interface SocialButtonProps {
 }
 
 const SocialLogin = () => {
+  const getRedirectUrl = () => {
+    if (window.location.hostname === 'localhost') {
+      return 'http://localhost:5173/GameFind/'
+    }
+    return 'https://angelo17-py.github.io/GameFind/'
+  }
+
   const handleSocialLogin = async (provider: 'google' | 'steam' | 'epicgames' | 'discord' | 'twitch') => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: 'http://localhost:5173/GameFind/',
+          redirectTo: getRedirectUrl(),
           flowType: 'pkce',
         },
       });
