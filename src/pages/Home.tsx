@@ -115,12 +115,12 @@ function Home() {
                     <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="GameFind" className="h-8 md:h-10 w-auto" />
                 </Link>
                 <div className="flex items-center gap-3 md:gap-6">
-                    <button className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-lg md:rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-medium">
+                    <Link to="/login" className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-lg md:rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-medium">
                         Entrar
-                    </button>
-                    <button className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-lg md:rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 font-bold shadow-lg shadow-purple-500/20">
+                    </Link>
+                    <Link to="/register" className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-lg md:rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 font-bold shadow-lg shadow-purple-500/20">
                         Registrarse
-                    </button>
+                    </Link>
                 </div>
             </nav>
 
