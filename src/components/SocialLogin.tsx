@@ -73,8 +73,9 @@ const SocialLogin = () => {
             key={social.provider}
             onClick={() => handleSocialLogin(social.provider)}
             className={`flex items-center justify-center gap-3 px-4 py-3 rounded-xl border transition-all duration-300 group ${social.color} w-full`}
+            aria-label={`Iniciar sesión con ${social.label}`}
           >
-            <span className="text-gray-400 group-hover:text-white transition-colors">
+            <span className="text-gray-400 group-hover:text-white transition-colors" aria-hidden="true">
               {social.icon}
             </span>
             <span className="text-sm font-bold text-gray-400 group-hover:text-white">
