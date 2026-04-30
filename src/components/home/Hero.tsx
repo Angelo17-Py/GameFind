@@ -39,7 +39,8 @@ export const Hero: React.FC<HeroProps> = ({ searchTerm, setSearchTerm, handleSea
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="¿Qué quieres jugar hoy?"
-                        className="w-full bg-transparent px-4 md:px-6 py-2.5 md:py-3.5 text-white outline-none placeholder:text-gray-500 text-sm md:text-base font-medium"
+                        className="w-full px-4 md:px-6 py-2.5 md:py-3.5 text-white outline-none placeholder:text-purple-300/40 text-sm md:text-base font-medium focus:ring-0"
+                        style={{ background: 'transparent', WebkitAppearance: 'none' }}
                     />
                     <button 
                         type="submit" 
