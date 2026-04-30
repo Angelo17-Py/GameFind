@@ -67,7 +67,12 @@ export const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFa
                             >
                                 <div className="flex items-center gap-3">
                                     <div className="w-6 h-6 rounded-lg bg-white/10 p-1 flex items-center justify-center">
-                                        <img src={offer.logo} alt="" className="w-full h-full object-contain" aria-hidden="true" />
+                                        <img 
+                                            src={offer.logo} 
+                                            alt="" 
+                                            className={`w-full h-full object-contain ${offer.store === 'GOG' ? 'invert brightness-200' : ''}`} 
+                                            aria-hidden="true" 
+                                        />
                                     </div>
                                     <div className="flex flex-col">
                                         <span className={`text-[9px] font-black uppercase tracking-widest ${idx === 0 ? 'text-cyan-400' : 'text-gray-400'}`}>{offer.store}</span>
