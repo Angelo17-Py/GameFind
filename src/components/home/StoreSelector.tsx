@@ -27,7 +27,12 @@ export const StoreSelector: React.FC<StoreSelectorProps> = ({ storeMap, selected
                                 : 'bg-white/5 border-white/10 hover:border-white/30 grayscale hover:grayscale-0'
                             }`}
                     >
-                        <img src={store.logo} alt="" className="w-5 h-5 object-contain" aria-hidden="true" />
+                        <img 
+                            src={store.logo} 
+                            alt="" 
+                            className={`w-5 h-5 object-contain ${id === 'gog' ? 'invert brightness-200' : ''}`} 
+                            aria-hidden="true" 
+                        />
                         <span className={`text-xs font-black uppercase tracking-widest ${selectedStore === id ? 'text-cyan-400' : 'text-gray-400'}`}>
                             {store.name}
                         </span>

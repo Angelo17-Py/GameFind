@@ -22,7 +22,9 @@ export interface Game {
 const STORE_MAP: Record<string, { name: string, logo: string }> = {
     "steam": { name: "Steam", logo: "https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" },
     "epic": { name: "Epic Games", logo: "https://upload.wikimedia.org/wikipedia/commons/3/31/Epic_Games_logo.svg" },
-    "gog": { name: "GOG", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2e/GOG.com_logo.svg" }
+    "gog": { name: "GOG", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2e/GOG.com_logo.svg" },
+    "gamesplanet": { name: "Gamesplanet", logo: "https://gpstatic.com/assets/gamesplanet_com_circle-4aac2ab0b9700fc58cb2631f1fd5d12fb5b162d956ab2c217dc61ec92d827d2e.svg" },
+    "gamersgate": { name: "GamersGate", logo: "https://www.gamersgate.com/static/images/logo.svg" }
 }
 
 export function useDeals() {
@@ -59,9 +61,13 @@ export function useDeals() {
                 supabaseQuery = supabaseQuery.ilike('nombre', `%${query}%`)
             } else {
                 // Si NO hay búsqueda, filtramos por la tienda seleccionada Y que tengan descuento
+                // Y que la información no tenga más de 24 horas de antigüedad
+                const hace24Horas = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+                
                 supabaseQuery = supabaseQuery
                     .eq('precios.tiendas.slug', storeSlug)
                     .gt('precios.descuento', 0)
+                    .gt('precios.ultima_actualizacion', hace24Horas)
             }
 
             const { data, error: dbError } = await supabaseQuery.limit(24)
@@ -79,6 +85,7 @@ export function useDeals() {
                         savings: p.descuento || 0,
                         url: p.url_oferta
                     }))
+                    .sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
 
                 return {
                     id: j.id.toString(),
