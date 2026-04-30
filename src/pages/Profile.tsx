@@ -17,27 +17,34 @@ function Profile() {
         setLoading(true)
         setFullName(currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || '')
 
+        // Consulta relacional directa: favoritos -> juegos -> precios
         const { data, error } = await supabase
-            .from('favorites')
-            .select('*')
-            .eq('user_id', currentUser.id)
+            .from('favoritos')
+            .select(`
+                juego_id,
+                juegos (
+                    precios (
+                        precio_actual,
+                        precio_original
+                    )
+                )
+            `)
+            .eq('usuario_id', currentUser.id)
 
         if (!error && data) {
             let totalSaved = 0
-            await Promise.all(data.map(async (fav) => {
-                try {
-                    const res = await fetch(`https://www.cheapshark.com/api/1.0/games?id=${fav.game_id}`)
-                    const gameData = await res.json()
-                    const lowestDeal = gameData.deals.sort((a: any, b: any) => parseFloat(a.price) - parseFloat(b.price))[0]
-                    if (lowestDeal) {
-                        const saved = parseFloat(lowestDeal.retailPrice) - parseFloat(lowestDeal.price)
-                        if (saved > 0) totalSaved += saved
-                    }
-                } catch(e) {
-                    // Ignore errors for stats
+            data.forEach((fav: any) => {
+                const precios = fav.juegos?.precios || []
+                if (precios.length > 0) {
+                    // Mejor precio actual en cualquier tienda
+                    const bestDeal = precios.reduce((prev: any, curr: any) =>
+                        prev.precio_actual < curr.precio_actual ? prev : curr
+                    )
+                    const saved = (bestDeal.precio_original || 0) - bestDeal.precio_actual
+                    if (saved > 0) totalSaved += saved
                 }
-            }))
-            setStats({ saved: totalSaved, tracked: data.length })
+            })
+            setStats({ saved: Math.round(totalSaved * 100) / 100, tracked: data.length })
         }
         setLoading(false)
     }, [])

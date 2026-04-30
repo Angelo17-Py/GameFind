@@ -9,14 +9,14 @@ export function useFavorites(userId: string | undefined) {
         if (!userId) return
         setLoading(true)
         const { data, error } = await supabase
-            .from('favorites')
-            .select('game_id')
-            .eq('user_id', userId)
+            .from('favoritos')
+            .select('juego_id')
+            .eq('usuario_id', userId)
         
         if (error) {
             console.error('Error fetching favorites:', error)
         } else {
-            setFavorites(data.map(f => f.game_id))
+            setFavorites(data.map(f => f.juego_id))
         }
         setLoading(false)
     }, [userId])
@@ -28,10 +28,10 @@ export function useFavorites(userId: string | undefined) {
 
         if (isFavorite) {
             const { error } = await supabase
-                .from('favorites')
+                .from('favoritos')
                 .delete()
-                .eq('user_id', userId)
-                .eq('game_id', game.id)
+                .eq('usuario_id', userId)
+                .eq('juego_id', game.id)
 
             if (!error) {
                 setFavorites(prev => prev.filter(id => id !== game.id))
@@ -39,13 +39,11 @@ export function useFavorites(userId: string | undefined) {
             return { error }
         } else {
             const { error } = await supabase
-                .from('favorites')
+                .from('favoritos')
                 .insert([
                     { 
-                        user_id: userId, 
-                        game_id: game.id, 
-                        title: game.title, 
-                        image: game.image 
+                        usuario_id: userId, 
+                        juego_id: game.id
                     }
                 ])
 
