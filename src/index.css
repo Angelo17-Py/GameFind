@@ -60,6 +60,22 @@
   .search-input {
     @apply w-full max-w-2xl bg-bg-card border border-white/10 px-6 py-4 rounded-full text-white text-lg outline-none transition-all duration-300 focus:border-accent focus:shadow-[0_0_15px_rgba(56,189,248,0.3)];
   }
+
+  /* Accesibilidad */
+  .visually-hidden {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .skip-link {
+    @apply absolute top-0 left-0 bg-accent text-bg-dark px-4 py-2 z-[100] -translate-y-full transition-transform focus:translate-y-0;
+  }
+}
+
+@layer base {
+  :focus-visible {
+    @apply outline-2 outline-accent outline-offset-4;
+  }
 }
 
 @keyframes gradient {
