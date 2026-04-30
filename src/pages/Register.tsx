@@ -7,6 +7,8 @@ import SocialLogin from '../components/SocialLogin'
  * Componente de la página de Registro.
  * Mantiene la coherencia visual premium con el Login pero adaptado para nuevos usuarios.
  */
+import { AuthLayout } from '../components/AuthLayout'
+
 function Register() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -49,199 +51,113 @@ function Register() {
     }
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-[#0c061a] font-sans text-white antialiased overflow-x-hidden">
+        <AuthLayout
+            title="REGISTRARSE"
+            subtitle="Regístrate para comparar y guardar tus juegos"
+            heroTitle={<>ÚNETE A LA <br /> MAYOR <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">COMUNIDAD!</span></>}
+            heroSubtitle="Crea tu cuenta gratis y empieza a ahorrar en tus videojuegos favoritos hoy mismo."
+            switchText="¿Ya tienes cuenta?"
+            switchLinkText="Inicia sesión"
+            switchLink="/login"
+        >
+            {error && (
+                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-sm font-medium" role="alert">
+                    {error}
+                </div>
+            )}
 
-            {/* Main Container: 100% ancho y alto en desktop */}
-            <div className="flex flex-col md:flex-row w-full min-h-screen md:h-screen bg-[#0c061a] overflow-hidden relative z-10">
-
-                {/* Fondo Decorativo Global para Móvil (Planetas con alta visibilidad) */}
-                <div className="md:hidden absolute inset-0 pointer-events-none overflow-hidden">
-                    <div className="absolute -top-[5%] -left-[15%] w-[90vw] h-[90vw] rounded-full bg-gradient-to-br from-[#00f0ff]/40 via-[#0055ff]/20 to-transparent blur-xl">
-                        <div className="absolute inset-[15%] rounded-full border-t-[5px] border-white/30 rotate-45"></div>
+            <form className="space-y-5" onSubmit={handleRegister}>
+                <div className="relative group">
+                    <label htmlFor="name" className="sr-only">Nombre completo</label>
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-cyan-400 text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     </div>
-                    <div className="absolute bottom-[10%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-[#d946ef]/40 to-[#581c87]/20 shadow-[0_0_50px_rgba(217,70,239,0.2)]"></div>
+                    <input
+                        id="name"
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-cyan-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
+                        placeholder="Nombre"
+                        required
+                    />
                 </div>
 
-                {/* Panel Izquierdo - Visual/Brand (Oculto en móvil) */}
-                <div className="hidden md:flex w-1/2 relative p-12 xl:p-24 flex-col justify-between overflow-hidden bg-[#0c061a]">
-
-                    {/* Fondo Decorativo (Planetas y Espacio) */}
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                        {/* Planeta Grande Cian/Azul */}
-                        <div className="absolute -top-[15%] -left-[10%] w-[55vw] h-[55vw] min-w-[700px] min-h-[700px] rounded-full bg-gradient-to-br from-[#00f0ff] via-[#0055ff] to-transparent opacity-80 blur-[1px]">
-                            <div className="absolute inset-10 rounded-full border-t-[6px] border-white/20 rotate-45"></div>
-                            <div className="absolute inset-20 rounded-full border-t-[6px] border-white/10 -rotate-12"></div>
-                        </div>
-
-                        {/* Planeta Pequeño Púrpura */}
-                        <div className="absolute top-[45%] right-[-5%] w-[25vw] h-[25vw] min-w-[300px] min-h-[300px] rounded-full bg-gradient-to-br from-[#d946ef] to-[#581c87] shadow-[0_0_40px_rgba(217,70,239,0.4)]">
-                            <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-transparent to-white/20"></div>
-                        </div>
-
-                        {/* Estrellas Distantes */}
-                        <div className="absolute top-[20%] left-[60%] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_8px_white]"></div>
-                        <div className="absolute top-[70%] left-[20%] w-2 h-2 bg-cyan-200 rounded-full shadow-[0_0_10px_cyan]"></div>
-                        <div className="absolute top-[85%] right-[40%] w-1.5 h-1.5 bg-purple-300 rounded-full shadow-[0_0_8px_purple]"></div>
-
-                        {/* Estrellas Fugaces */}
-                        <div className="absolute top-[15%] right-[20%] w-40 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent rotate-[35deg] opacity-60"></div>
-                        <div className="absolute top-[65%] left-[25%] w-60 h-[2px] bg-gradient-to-r from-transparent via-cyan-200 to-transparent rotate-[35deg] opacity-40"></div>
-                        <div className="absolute bottom-[15%] right-[15%] w-32 h-[1px] bg-gradient-to-r from-transparent via-purple-300 to-transparent rotate-[35deg] opacity-50"></div>
+                <div className="relative group">
+                    <label htmlFor="email" className="sr-only">Correo Electrónico</label>
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-purple-400 text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        </svg>
                     </div>
-
-                    <Link to="/" className="relative z-10 flex items-center gap-3 hover:opacity-80 transition-opacity group">
-                        <div className="absolute inset-0 bg-black/60 blur-[60px] rounded-full scale-[2.5] -z-10"></div>
-                        <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="GameFind Logo" className="h-16 w-auto relative z-10" />
-                    </Link>
-
-                    {/* Texto de Bienvenida Hero */}
-                    <div className="relative z-10 mb-4 xl:mb-8 text-left">
-                        <h1 className="text-5xl xl:text-6xl font-black text-white leading-[1.1] mb-4 drop-shadow-2xl uppercase">
-                            ÚNETE A LA <br />
-                            MAYOR <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
-                                COMUNIDAD!
-                            </span>
-                        </h1>
-                        <p className="text-purple-200 text-base max-w-sm font-medium">
-                            Crea tu cuenta gratis y empieza a ahorrar en tus videojuegos favoritos hoy mismo.
-                        </p>
-                    </div>
+                    <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-purple-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
+                        placeholder="tu_correo@gmail.com"
+                        required
+                    />
                 </div>
 
-                {/* Panel Derecho - Formulario */}
-                <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col relative bg-transparent md:bg-[#150c2b] justify-center items-center">
-
-                    {/* Barra Superior (Volver + Acción) */}
-                    <div className="absolute top-4 left-4 right-4 md:top-10 md:left-12 md:right-12 flex justify-between items-center z-20">
-                        {/* Botón Volver */}
-                        <Link to="/" className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-white transition-colors group">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                            <span>Volver</span>
-                        </Link>
-
-                        {/* Enlace de Login */}
-                        <div className="flex items-center gap-4">
-                            <span className="text-sm text-gray-400 font-medium hidden sm:block">¿Ya tienes cuenta?</span>
-                            <Link to="/login" className="relative inline-flex items-center justify-center px-5 md:px-6 py-2.5 text-sm font-bold text-purple-300 transition-all duration-300 bg-purple-900/10 border border-purple-500/30 rounded-xl hover:bg-purple-900/20 hover:border-cyan-400/50 backdrop-blur-sm">
-                                Inicia sesión
-                            </Link>
-                        </div>
+                <div className="relative group">
+                    <label htmlFor="password" className="sr-only">Contraseña</label>
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-purple-400 text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
                     </div>
-
-                    {/* Contenedor del Formulario */}
-                    <div className="w-full max-w-sm md:max-w-md mx-auto flex flex-col justify-center min-h-[85vh] md:min-h-0 px-4 sm:px-0 pt-12 md:pt-0">
-
-                        {/* Logo en Móvil con fondo difuminado */}
-                        <Link to="/" className="md:hidden relative flex items-center gap-3 mb-10 justify-center hover:opacity-80 transition-opacity">
-                            <div className="absolute inset-0 bg-black/60 blur-[30px] rounded-full scale-[2] -z-10"></div>
-                            <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="GameFind Logo" className="h-11 w-auto relative z-10" />
-                        </Link>
-
-                        <div className="mb-8 text-center md:text-left">
-                            <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight uppercase text-white">REGISTRARSE</h2>
-                            <p className="text-gray-400 text-sm md:text-base">Regístrate para comparar y guardar tus juegos</p>
-                        </div>
-
-                        {error && (
-                            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-sm font-medium">
-                                {error}
-                            </div>
-                        )}
-
-                        <form className="space-y-5" onSubmit={handleRegister}>
-
-                            {/* Input de Nombre*/}
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-cyan-400 text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                </div>
-                                <input
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-cyan-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
-                                    placeholder="Nombre"
-                                    required
-                                />
-                            </div>
-
-                            {/* Input de Email */}
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-purple-400 text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                                    </svg>
-                                </div>
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-purple-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
-                                    placeholder="tu_correo@gmail.com"
-                                    required
-                                />
-                            </div>
-
-                            {/* Input de Contraseña */}
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-purple-400 text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                    </svg>
-                                </div>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-purple-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
-                                    placeholder="Contraseña"
-                                    required
-                                />
-                            </div>
-
-                            {/* Input de Confirmar Contraseña */}
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-cyan-400 text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                                </div>
-                                <input
-                                    type="password"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-cyan-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
-                                    placeholder="Confirmar Contraseña"
-                                    required
-                                />
-                            </div>
-
-                            {/* Botón de Envío */}
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-lg rounded-xl py-4 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_15px_25px_rgba(107,33,168,0.5)] flex justify-center items-center gap-2 group mt-4 disabled:opacity-50 disabled:transform-none"
-                            >
-                                {loading ? 'Registrando...' : 'Registrarse'}
-                                {!loading && (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1.5 transition-transform">
-                                        <path d="M5 12h14"></path>
-                                        <path d="m12 5 7 7-7 7"></path>
-                                    </svg>
-                                )}
-                            </button>
-                        </form>
-
-                        <div className="mt-8">
-                            <SocialLogin />
-                        </div>
-                    </div>
-
+                    <input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-purple-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
+                        placeholder="Contraseña"
+                        required
+                    />
                 </div>
+
+                <div className="relative group">
+                    <label htmlFor="confirmPassword" className="sr-only">Confirmar Contraseña</label>
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-cyan-400 text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <input
+                        id="confirmPassword"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="w-full bg-[#1e1438] border border-[#2d1b54] focus:border-cyan-500 focus:bg-[#251a45] rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-500 outline-none transition-all duration-300"
+                        placeholder="Confirmar Contraseña"
+                        required
+                    />
+                </div>
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-lg rounded-xl py-4 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_15px_25px_rgba(107,33,168,0.5)] flex justify-center items-center gap-2 group mt-4 disabled:opacity-50 disabled:transform-none"
+                >
+                    {loading ? 'Registrando...' : 'Registrarse'}
+                    {!loading && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1.5 transition-transform" aria-hidden="true">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    )}
+                </button>
+            </form>
+
+            <div className="mt-8">
+                <SocialLogin />
             </div>
-        </div>
+        </AuthLayout>
     )
 }
+
 
 export default Register
