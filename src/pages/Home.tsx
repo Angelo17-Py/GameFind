@@ -14,7 +14,7 @@ import { MainLayout } from '../components/MainLayout'
 function Home() {
     const [searchTerm, setSearchTerm] = useState('')
     const [hasSearched, setHasSearched] = useState(false)
-    const [selectedStore, setSelectedStore] = useState('1')
+    const [selectedStore, setSelectedStore] = useState('steam')
     const [user, setUser] = useState<User | null>(null)
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 
@@ -22,8 +22,11 @@ function Home() {
     const { favorites, fetchFavorites, toggleFavorite } = useFavorites(user?.id)
 
     useEffect(() => {
-        if (!searchTerm) fetchDeals()
-    }, [fetchDeals, searchTerm])
+        if (!searchTerm.trim()) {
+            fetchDeals('', selectedStore)
+            setHasSearched(false)
+        }
+    }, [fetchDeals, searchTerm, selectedStore])
 
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => {
@@ -43,6 +46,7 @@ function Home() {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault()
+        if (!searchTerm.trim()) return
         setHasSearched(true)
         fetchDeals(searchTerm)
     }

@@ -77,7 +77,9 @@ export const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFa
                                     </div>
                                 </div>
                                 <div className="text-right flex flex-col items-end">
-                                    <span className="text-[10px] text-gray-500 line-through font-medium">${offer.retail}</span>
+                                    {offer.savings > 0 && (
+                                        <span className="text-[10px] text-gray-500 line-through font-medium">${offer.retail}</span>
+                                    )}
                                     <span className={`text-sm font-black ${idx === 0 ? 'text-cyan-400' : 'text-white'}`}>${offer.price}</span>
                                 </div>
                             </div>
