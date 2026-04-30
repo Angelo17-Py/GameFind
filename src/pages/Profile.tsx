@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import type { User } from '@supabase/supabase-js'
 import Navbar from '../components/Navbar'
+
+import { MainLayout } from '../components/MainLayout'
 
 function Profile() {
     const [user, setUser] = useState<User | null>(null)
@@ -15,7 +17,6 @@ function Profile() {
         setLoading(true)
         setFullName(currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || '')
 
-        // Obtener favoritos para calcular estadísticas
         const { data, error } = await supabase
             .from('favorites')
             .select('*')
@@ -33,7 +34,7 @@ function Profile() {
                         if (saved > 0) totalSaved += saved
                     }
                 } catch(e) {
-                    // Error de red, lo ignoramos para la suma
+                    // Ignore errors for stats
                 }
             }))
             setStats({ saved: totalSaved, tracked: data.length })
@@ -72,33 +73,17 @@ function Profile() {
         if (error) {
             alert('Error al actualizar el perfil')
         } else {
-            // Recargar datos actualizados
             supabase.auth.refreshSession()
             alert('¡Perfil actualizado con éxito!')
         }
     }
 
-    const handleLogout = async () => {
-        await supabase.auth.signOut()
-    }
-
     return (
-        <div className="min-h-screen w-full bg-[#0c061a] text-white font-sans selection:bg-cyan-500/30 overflow-x-hidden">
-            
-            {/* --- FONDO DECORATIVO --- */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-                <div className="absolute -top-[5%] -left-[10%] w-[80vw] h-[80vw] rounded-full bg-gradient-to-br from-[#00f0ff]/5 to-transparent blur-3xl opacity-40"></div>
-                <div className="absolute bottom-[5%] -right-[10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-br from-[#d946ef]/5 to-transparent blur-3xl opacity-30"></div>
-            </div>
-
-            <Navbar />
-
-            <div className="h-28 md:h-36"></div>
-
-            <main className="relative z-10 container mx-auto px-6 pb-20 max-w-4xl">
+        <MainLayout>
+            <div className="container mx-auto px-6 pb-20 max-w-4xl">
                 <header className="mb-12">
-                    <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6 text-sm font-bold uppercase tracking-widest group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6 text-sm font-bold uppercase tracking-widest group" aria-label="Volver a la tienda">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                         Volver a la tienda
                     </Link>
                     <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
@@ -107,7 +92,7 @@ function Profile() {
                 </header>
 
                 {loading ? (
-                    <div className="flex justify-center py-20">
+                    <div className="flex justify-center py-20" aria-live="polite">
                         <div className="w-12 h-12 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin"></div>
                     </div>
                 ) : user ? (
@@ -116,11 +101,12 @@ function Profile() {
                         <div className="md:col-span-1 flex flex-col gap-6">
                             <div className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col items-center text-center backdrop-blur-xl">
                                 <div className="relative mb-6">
-                                    <div className="absolute inset-0 bg-cyan-500/20 blur-xl rounded-full"></div>
+                                    <div className="absolute inset-0 bg-cyan-500/20 blur-xl rounded-full" aria-hidden="true"></div>
                                     <img 
                                         src={user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`} 
-                                        alt="Avatar" 
+                                        alt="" 
                                         className="w-32 h-32 rounded-full border-4 border-[#150c2b] shadow-2xl relative z-10"
+                                        aria-hidden="true"
                                     />
                                 </div>
                                 <h2 className="text-2xl font-black mb-1">{user.user_metadata?.full_name || 'Gamer Anónimo'}</h2>
@@ -133,7 +119,7 @@ function Profile() {
                             {/* Stats */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-gradient-to-br from-cyan-500/10 to-blue-600/10 border border-cyan-500/20 rounded-3xl p-6 relative overflow-hidden group">
-                                    <div className="absolute -right-6 -bottom-6 opacity-10 group-hover:scale-110 transition-transform">
+                                    <div className="absolute -right-6 -bottom-6 opacity-10 group-hover:scale-110 transition-transform" aria-hidden="true">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                                     </div>
                                     <span className="text-[10px] text-cyan-400 font-black uppercase tracking-widest block mb-2">Ahorro Potencial</span>
@@ -141,7 +127,7 @@ function Profile() {
                                     <p className="text-[9px] text-gray-500 mt-2 leading-relaxed">Diferencia entre el precio normal y el mejor precio actual de tus juegos guardados.</p>
                                 </div>
                                 <div className="bg-gradient-to-br from-purple-500/10 to-pink-600/10 border border-purple-500/20 rounded-3xl p-6 relative overflow-hidden group">
-                                    <div className="absolute -right-6 -bottom-6 opacity-10 group-hover:scale-110 transition-transform">
+                                    <div className="absolute -right-6 -bottom-6 opacity-10 group-hover:scale-110 transition-transform" aria-hidden="true">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
                                     </div>
                                     <span className="text-[10px] text-purple-400 font-black uppercase tracking-widest block mb-2">Juegos Rastreados</span>
@@ -155,8 +141,9 @@ function Profile() {
                                 
                                 <div className="space-y-6">
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Nombre de Usuario</label>
+                                        <label htmlFor="full-name" className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Nombre de Usuario</label>
                                         <input 
+                                            id="full-name"
                                             type="text" 
                                             value={fullName}
                                             onChange={(e) => setFullName(e.target.value)}
@@ -166,8 +153,9 @@ function Profile() {
                                     </div>
 
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Correo Electrónico</label>
+                                        <label htmlFor="email" className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Correo Electrónico</label>
                                         <input 
+                                            id="email"
                                             type="text" 
                                             value={user.email || ''}
                                             disabled
@@ -188,16 +176,18 @@ function Profile() {
                         </div>
                     </div>
                 ) : (
-                    <div className="text-center py-20">
+                    <div className="text-center py-20" aria-live="polite">
                         <h2 className="text-2xl font-bold mb-4">Debes iniciar sesión</h2>
                         <Link to="/login" className="bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-3 rounded-xl font-bold inline-block">
                             Ir a Entrar
                         </Link>
                     </div>
                 )}
-            </main>
-        </div>
+            </div>
+        </MainLayout>
     )
 }
 
+
 export default Profile
+
