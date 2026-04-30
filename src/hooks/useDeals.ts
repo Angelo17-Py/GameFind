@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { supabase } from '../lib/supabase'
 
 export interface Deal {
     store: string
@@ -17,13 +18,11 @@ export interface Game {
     deals: Deal[]
 }
 
+// Mapa de tiendas con Slugs como claves
 const STORE_MAP: Record<string, { name: string, logo: string }> = {
-    "1": { name: "Steam", logo: "https://www.cheapshark.com/img/stores/icons/0.png" },
-    "2": { name: "GamersGate", logo: "https://www.cheapshark.com/img/stores/icons/1.png" },
-    "3": { name: "GreenManGaming", logo: "https://www.cheapshark.com/img/stores/icons/2.png" },
-    "7": { name: "GOG", logo: "https://www.cheapshark.com/img/stores/icons/6.png" },
-    "11": { name: "Humble Store", logo: "https://www.cheapshark.com/img/stores/icons/10.png" },
-    "25": { name: "Epic Games", logo: "https://www.cheapshark.com/img/stores/icons/24.png" }
+    "steam": { name: "Steam", logo: "https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" },
+    "epic": { name: "Epic Games", logo: "https://upload.wikimedia.org/wikipedia/commons/3/31/Epic_Games_logo.svg" },
+    "gog": { name: "GOG", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2e/GOG.com_logo.svg" }
 }
 
 export function useDeals() {
@@ -31,67 +30,78 @@ export function useDeals() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    const fetchDeals = useCallback(async (query = '', storeId = '1') => {
+    const fetchDeals = useCallback(async (query = '', storeSlug = 'steam') => {
         setLoading(true)
         setError(null)
         try {
-            let url = ""
+            let supabaseQuery = supabase
+                .from('juegos')
+                .select(`
+                    id,
+                    nombre,
+                    imagen_url,
+                    precios!inner (
+                        precio_actual,
+                        precio_original,
+                        descuento,
+                        url_oferta,
+                        moneda,
+                        tiendas!inner (
+                            nombre,
+                            logo_url,
+                            slug
+                        )
+                    )
+                `)
+
+            // Si hay búsqueda, buscamos por nombre
             if (query) {
-                url = `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=20`
-                const res = await fetch(url)
-                const data = await res.json()
-
-                const detailedGames = await Promise.all(data.map(async (g: any) => {
-                    const gameRes = await fetch(`https://www.cheapshark.com/api/1.0/games?id=${g.gameID}`)
-                    const gameData = await gameRes.json()
-
-                    const validDeals = gameData.deals.map((d: any) => ({
-                        store: STORE_MAP[d.storeID]?.name || "Tienda",
-                        logo: STORE_MAP[d.storeID]?.logo || "",
-                        price: d.price,
-                        retail: d.retailPrice,
-                        savings: Math.round(parseFloat(d.savings)),
-                        url: `https://www.cheapshark.com/redirect?dealID=${d.dealID}`
-                    })).filter((d: any) => d.logo !== "").sort((a: any, b: any) => parseFloat(a.price) - parseFloat(b.price)).slice(0, 3)
-
-                    return {
-                        id: g.gameID,
-                        title: g.external,
-                        image: g.thumb,
-                        metacritic: gameData.info.metacriticScore || "N/A",
-                        deals: validDeals
-                    }
-                }))
-                setGames(detailedGames.filter(g => g.deals.length > 0).slice(0, 12))
+                supabaseQuery = supabaseQuery.ilike('nombre', `%${query}%`)
             } else {
-                url = `https://www.cheapshark.com/api/1.0/deals?storeID=${storeId}&upperPrice=60&sortBy=Savings&pageSize=15`
-                const res = await fetch(url)
-                const data = await res.json()
-
-                const enrichedDeals = await Promise.all(data.map(async (deal: any) => {
-                    const gameRes = await fetch(`https://www.cheapshark.com/api/1.0/games?id=${deal.gameID}`)
-                    const gameData = await gameRes.json()
-
-                    return {
-                        id: deal.gameID,
-                        title: deal.title,
-                        image: deal.thumb,
-                        metacritic: deal.metacriticScore || "N/A",
-                        deals: gameData.deals.map((d: any) => ({
-                            store: STORE_MAP[d.storeID]?.name || "Tienda",
-                            logo: STORE_MAP[d.storeID]?.logo || "",
-                            price: d.price,
-                            retail: d.retailPrice,
-                            savings: Math.round(parseFloat(d.savings)),
-                            url: `https://www.cheapshark.com/redirect?dealID=${d.dealID}`
-                        })).filter((d: any) => d.logo !== "").sort((a: any, b: any) => parseFloat(a.price) - parseFloat(b.price)).slice(0, 3)
-                    }
-                }))
-                setGames(enrichedDeals.filter(g => g.deals.length > 0))
+                // Si NO hay búsqueda, filtramos por la tienda seleccionada Y que tengan descuento
+                supabaseQuery = supabaseQuery
+                    .eq('precios.tiendas.slug', storeSlug)
+                    .gt('precios.descuento', 0)
             }
+
+            const { data, error: dbError } = await supabaseQuery.limit(24)
+
+            if (dbError) throw dbError
+
+            const mappedGames: Game[] = (data || []).map((j: any) => {
+                const deals = (j.precios || [])
+                    .filter((p: any) => p && p.tiendas)
+                    .map((p: any) => ({
+                        store: p.tiendas.nombre,
+                        logo: p.tiendas.logo_url || STORE_MAP[p.tiendas.slug]?.logo || "",
+                        price: parseFloat(p.precio_actual).toFixed(2),
+                        retail: parseFloat(p.precio_original || p.precio_actual).toFixed(2),
+                        savings: p.descuento || 0,
+                        url: p.url_oferta
+                    }))
+
+                return {
+                    id: j.id.toString(),
+                    title: j.nombre,
+                    image: j.imagen_url,
+                    metacritic: "N/A",
+                    deals
+                }
+            })
+
+            // Ordenar: mejores descuentos primero
+            const sortedGames = mappedGames
+                .sort((a, b) => {
+                    const maxA = Math.max(...a.deals.map(d => d.savings), 0);
+                    const maxB = Math.max(...b.deals.map(d => d.savings), 0);
+                    return maxB - maxA;
+                });
+
+            setGames(sortedGames)
+
         } catch (err) {
             console.error("Error fetching deals:", err)
-            setError("No se pudieron cargar las ofertas. Reintenta más tarde.")
+            setError("Error al cargar las ofertas.")
         } finally {
             setLoading(false)
         }
