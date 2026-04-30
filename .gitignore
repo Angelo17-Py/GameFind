@@ -27,3 +27,4 @@ dist-ssr
 .agents/
 .antigravity/
 skills-lock.json
+AGENTS.md
