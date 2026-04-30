@@ -13,4 +13,14 @@ export default defineConfig({
     // Habilita la integración de Tailwind CSS v4 (compilación ultra rápida)
     tailwindcss(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id: string) => {
+          if (id.includes('@supabase')) return 'supabase'
+          if (id.includes('node_modules')) return 'vendor'
+        }
+      }
+    }
+  }
 })

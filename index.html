@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/GameFind/favicon.svg" />
-  <link rel="shortcut icon" href="/GameFind/favicon.svg" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="shortcut icon" href="favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- SEO Primario -->
@@ -15,22 +15,48 @@
   <meta name="keywords"
     content="videojuegos, comparar precios, ofertas juegos, gamefind, steam deals, epic games store" />
   <meta name="author" content="GameFind Team" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://angelo17-py.github.io/GameFind/" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "GameFind",
+      "url": "https://angelo17-py.github.io/GameFind/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://angelo17-py.github.io/GameFind/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "GameFind",
+      "url": "https://angelo17-py.github.io/GameFind/",
+      "logo": "https://angelo17-py.github.io/GameFind/favicon.svg"
+    }
+  </script>
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://gamefind.com/" />
+  <meta property="og:url" content="https://angelo17-py.github.io/GameFind/" />
   <meta property="og:title" content="GameFind | Compara y Ahorra en Videojuegos" />
   <meta property="og:description"
     content="La plataforma definitiva para cazadores de ofertas de videojuegos. Todas las tiendas en un solo lugar." />
-  <meta property="og:image" content="/GameFind/favicon.svg" />
+  <meta property="og:image" content="favicon.svg" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://gamefind.com/" />
+  <meta property="twitter:url" content="https://angelo17-py.github.io/GameFind/" />
   <meta property="twitter:title" content="GameFind | Compara y Ahorra en Videojuegos" />
   <meta property="twitter:description"
     content="La plataforma definitiva para cazadores de ofertas de videojuegos. Todas las tiendas en un solo lugar." />
-  <meta property="twitter:image" content="/GameFind/favicon.svg" />
+  <meta property="twitter:image" content="favicon.svg" />
 
   <!-- Rendimiento: Preconexión a Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +68,7 @@
   <div id="root"></div>
 
   <!-- Punto de entrada de la aplicación -->
-  <script type="module" src="/src/main.tsx"></script>
+  <script type="module" src="src/main.tsx"></script>
 </body>
 
-</html>
+</html>
