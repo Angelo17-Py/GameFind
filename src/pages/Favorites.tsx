@@ -59,7 +59,7 @@ function Favorites() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {favorites.map(game => (
-                            <div key={game.game_id} className="group relative animate-fade">
+                            <div key={game.juego_id} className="group relative animate-fade">
                                 <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/20 to-purple-600/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
                                 <div className="relative bg-[#150c2b]/80 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden flex flex-col h-full hover:border-white/20 transition-all duration-500">
                                     <div className="h-40 overflow-hidden relative bg-black/40 flex items-center justify-center">
@@ -67,7 +67,7 @@ function Favorites() {
                                         <img src={game.image} alt={`Portada de ${game.title}`} className="relative z-10 w-full h-full object-contain p-4" />
                                         
                                         <button 
-                                            onClick={() => removeFavorite(game.game_id)}
+                                            onClick={() => removeFavorite(game.juego_id)}
                                             className="absolute top-3 right-3 z-20 p-2 rounded-xl bg-black/60 border border-white/10 text-red-500 hover:bg-red-500 hover:text-white transition-all"
                                             aria-label={`Eliminar ${game.title} de favoritos`}
                                         >

@@ -25,9 +25,9 @@ export default function Navbar() {
 
     const fetchFavCount = async (userId: string) => {
         const { count } = await supabase
-            .from('favorites')
+            .from('favoritos')
             .select('*', { count: 'exact', head: true })
-            .eq('user_id', userId)
+            .eq('usuario_id', userId)
         setFavCount(count ?? 0)
     }
 

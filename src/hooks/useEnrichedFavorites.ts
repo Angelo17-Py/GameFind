@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
 export interface EnrichedFavorite {
-    game_id: string
+    juego_id: string
     title: string
     image: string
     currentPrice: string
@@ -16,53 +16,64 @@ export function useEnrichedFavorites(userId: string | undefined) {
     const fetchFavorites = useCallback(async () => {
         if (!userId) return
         setLoading(true)
+        // Consulta relacional directa: Obtenemos el favorito -> el juego -> sus precios
         const { data, error } = await supabase
-            .from('favorites')
-            .select('*')
-            .eq('user_id', userId)
-            .order('created_at', { ascending: false })
+            .from('favoritos')
+            .select(`
+                juego_id,
+                juegos (
+                    nombre,
+                    imagen_url,
+                    precios (
+                        precio_actual,
+                        url_oferta
+                    )
+                )
+            `)
+            .eq('usuario_id', userId)
+            .order('fecha_creacion', { ascending: false })
         
         if (error) {
             console.error('Error fetching favorites:', error)
             setFavorites([])
         } else if (data) {
-            const enrichedData = await Promise.all(data.map(async (fav) => {
-                try {
-                    const res = await fetch(`https://www.cheapshark.com/api/1.0/games?id=${fav.game_id}`)
-                    const gameData = await res.json()
-                    const lowestDeal = gameData.deals.sort((a: any, b: any) => parseFloat(a.price) - parseFloat(b.price))[0]
-                    return { 
-                        game_id: fav.game_id,
-                        title: fav.title,
-                        image: fav.image,
-                        currentPrice: lowestDeal ? lowestDeal.price : 'N/A', 
-                        dealUrl: lowestDeal ? `https://www.cheapshark.com/redirect?dealID=${lowestDeal.dealID}` : '#'
-                    }
-                } catch(e) {
-                    return { 
-                        game_id: fav.game_id,
-                        title: fav.title,
-                        image: fav.image,
-                        currentPrice: 'N/A', 
-                        dealUrl: '#' 
-                    }
+            const enrichedData = data.map((fav: any) => {
+                const juego = fav.juegos;
+                // Encontrar el precio más bajo (si existe en alguna tienda)
+                let lowestPrice = 'N/A';
+                let dealUrl = '#';
+
+                if (juego.precios && juego.precios.length > 0) {
+                    const bestDeal = juego.precios.reduce((prev: any, current: any) => 
+                        (prev.precio_actual < current.precio_actual) ? prev : current
+                    );
+                    lowestPrice = bestDeal.precio_actual.toString();
+                    dealUrl = bestDeal.url_oferta;
                 }
-            }))
+
+                return { 
+                    juego_id: fav.juego_id,
+                    title: juego.nombre,
+                    image: juego.imagen_url,
+                    currentPrice: lowestPrice, 
+                    dealUrl: dealUrl
+                }
+            })
             setFavorites(enrichedData)
         }
         setLoading(false)
     }, [userId])
 
-    const removeFavorite = async (gameId: string) => {
+    const removeFavorite = async (juegoId: string) => {
         if (!userId) return
         const { error } = await supabase
-            .from('favorites')
+            .from('favoritos')
             .delete()
-            .eq('user_id', userId)
-            .eq('game_id', gameId)
+            .eq('usuario_id', userId)
+            .eq('juego_id', juegoId)
 
         if (!error) {
-            setFavorites(prev => prev.filter(f => f.game_id !== gameId))
+            setFavorites(prev => prev.filter(f => f.juego_id !== juegoId))
         }
     }
 
