@@ -17,7 +17,7 @@
     "scrap:gamesplanet": "node scripts/worker_gamesplanet.js",
     "scrap:gamersgate": "node scripts/worker_gamersgate.js",
     "scrap:sync": "node scripts/sync_prices.js",
-    "scrap:update-all": "npm run scrap:discover && npm run scrap:steam && npm run scrap:gog && npm run scrap:gamesplanet && npm run scrap:gamersgate && npm run scrap:sync"
+    "scrap:update-all": "npm run scrap:discover && npm run scrap:discover-epic && npm run scrap:steam && npm run scrap:epic && npm run scrap:gog && npm run scrap:gamesplanet && npm run scrap:gamersgate && npm run scrap:sync"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.105.1",
