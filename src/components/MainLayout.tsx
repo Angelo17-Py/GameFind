@@ -28,7 +28,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 <div className="container mx-auto flex flex-col items-center gap-6 text-center">
                     <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="GameFind" className="h-7 w-auto opacity-30" />
                     <p className="text-gray-500 text-[10px] md:text-xs uppercase tracking-widest font-medium">
-                        © 2026 GameFind • DATOS POR CHEAPSHARK
+                        © 2026 GameFind
                     </p>
                 </div>
             </footer>
