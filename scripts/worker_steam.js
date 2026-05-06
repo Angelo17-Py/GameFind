@@ -1,17 +1,16 @@
 /* =========================================================================
-   🤖 WORKER DE STEAM (EL TRABAJADOR AUTOMÁTICO)
+   WORKER DE STEAM (EL TRABAJADOR AUTOMÁTICO)
    =========================================================================
    Explicación sencilla:
    Imaginemos que este código es un empleado (un "worker" o trabajador) que 
    mandamos a la tienda de Steam a revisar los precios por nosotros.
    
    ¿Cómo trabaja?
-   1. Se conecta a nuestra base de datos de Supabase).
+   1. Se conecta a nuestra base de datos de Supabase.
    2. Busca en nuestra base de datos todos los juegos que sabemos que están en Steam.
    3. Va a la tienda virtual de Steam y pregunta el precio de cada uno (usando una API).
    4. Anota los precios nuevos en nuestra base de datos y guarda la foto del juego.
-   5. ¡MUY IMPORTANTE!: Descansa 10 segundos entre cada juego para que Steam 
-      no piense que somos un robot malo y nos bloquee.
+   5. Descansa 10 segundos entre cada juego para que Steam no piense que somos un robot malo y nos bloquee.
    ========================================================================= */
 
 import { createClient } from '@supabase/supabase-js';
@@ -40,8 +39,8 @@ const ESPERA_MS = 10000;
 const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function actualizarPreciosSteam() {
-    console.log('🚀 Iniciando actualización de precios de Steam...');
-    console.log(`🔗 Conectando a: ${SUPABASE_URL}`);
+    console.log('Iniciando actualización de precios de Steam...');
+    console.log(`Conectando a: ${SUPABASE_URL}`);
 
     // PASO 4: Comprobar que podemos leer la base de datos sin problemas
     const { data: testData, error: testError } = await supabase
@@ -50,10 +49,10 @@ async function actualizarPreciosSteam() {
         .limit(1);
 
     if (testError) {
-        console.error('❌ Error de conexión/permisos:', testError);
+        console.error('Error de conexión/permisos:', testError);
         return;
     }
-    console.log('✅ Conexión exitosa! Tiendas disponibles:', testData);
+    console.log('Conexión exitosa! Tiendas disponibles:', testData);
 
     // PASO 5: Buscar el número de identificación interno que le pusimos a "Steam" en nuestra base de datos
     const { data: tiendaSteam, error: tiendaError } = await supabase
@@ -63,12 +62,12 @@ async function actualizarPreciosSteam() {
         .single();
 
     if (tiendaError || !tiendaSteam) {
-        console.error('❌ No se encontró la tienda Steam en la base de datos:', tiendaError);
+        console.error('No se encontró la tienda Steam en la base de datos:', tiendaError);
         return;
     }
 
     const TIENDA_STEAM_ID = tiendaSteam.id;
-    console.log(`🏪 Tienda Steam ID: ${TIENDA_STEAM_ID}`);
+    console.log(`Tienda Steam ID: ${TIENDA_STEAM_ID}`);
 
     // PASO 6: Buscar qué juegos en nuestra base de datos tienen un código de Steam
     // (Solo le preguntaremos a Steam por los juegos que sabemos que vende)
@@ -82,13 +81,13 @@ async function actualizarPreciosSteam() {
         return;
     }
 
-    console.log(`📦 Se encontraron ${juegos.length} juegos para procesar.`);
+    console.log(`Se encontraron ${juegos.length} juegos para procesar.`);
 
     // PASO 7: Ir juego por juego preguntando el precio
     // Esto es un "bucle" o repetición: repite lo mismo para cada juego de la lista.
     for (const juego of juegos) {
         try {
-            console.log(`🔍 Procesando: ${juego.nombre} (ID: ${juego.steam_app_id})...`);
+            console.log(`Procesando: ${juego.nombre} (ID: ${juego.steam_app_id})...`);
 
             // Aquí está el truco: usamos un enlace "oculto" de Steam (una API) 
             // que nos devuelve los datos en texto puro, sin gráficos pesados.
@@ -134,29 +133,29 @@ async function actualizarPreciosSteam() {
                         }, { onConflict: 'juego_id,tienda_id' });
 
                     if (upsertError) {
-                        console.error(`❌ Error al guardar precio de ${juego.nombre}:`, upsertError);
+                        console.error(`Error al guardar precio de ${juego.nombre}:`, upsertError);
                     } else {
-                        console.log(`✅ ${juego.nombre}: $${precioActual} ${moneda} (${descuento}% desc)`);
+                        console.log(`${juego.nombre}: $${precioActual} ${moneda} (${descuento}% desc)`);
                     }
                 } else {
-                    console.log(`⚠️ ${juego.nombre} no tiene información de precio (posiblemente gratuito o no disponible).`);
+                    console.log(`${juego.nombre} no tiene información de precio (posiblemente gratuito o no disponible).`);
                 }
             } else {
-                console.warn(`⚠️ Steam no devolvió éxito para ${juego.nombre}.`);
+                console.warn(`Steam no devolvió éxito para ${juego.nombre}.`);
             }
 
         } catch (err) {
-            console.error(`💥 Error fatal procesando ${juego.nombre}:`, err);
+            console.error(`Error fatal procesando ${juego.nombre}:`, err);
         }
 
         // PASO 10: El descanso obligatorio. 
         // El trabajador se toma un café por 10 segundos antes de ir al siguiente juego.
         // Sin esto, Steam nos banearía (nos echaría de la tienda por hacer muchas preguntas muy rápido).
-        console.log(`⏳ Tomando un descanso de ${ESPERA_MS / 1000} segundos para no saturar a Steam...`);
+        console.log(`Tomando un descanso de ${ESPERA_MS / 1000} segundos para no saturar a Steam...`);
         await esperar(ESPERA_MS);
     }
 
-    console.log('✨ Misión cumplida. Actualización de Steam finalizada.');
+    console.log('Misión cumplida. Actualización de Steam finalizada.');
 }
 
 // ¡A trabajar! Esta es la orden final que enciende el worker.

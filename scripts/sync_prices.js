@@ -1,5 +1,5 @@
 /* =========================================================================
-   🤖 WORKER DE SINCRONIZACIÓN (EL SUPERVISOR GENERAL)
+   WORKER DE SINCRONIZACIÓN (EL SUPERVISOR GENERAL)
    =========================================================================
    Explicación sencilla:
    Este es el "Jefe de Operaciones". En lugar de ir tienda por tienda 
@@ -24,7 +24,7 @@ dotenv.config();
 const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 async function sincronizarPreciosCruzados() {
-    console.log('🔄 Iniciando Sincronización Cruzada de Precios...');
+    console.log('Iniciando Sincronización Cruzada de Precios...');
 
     try {
         // PASO 2: Obtener los códigos de identificación de todas nuestras tiendas (Steam, Epic, GOG...)
@@ -39,9 +39,9 @@ async function sincronizarPreciosCruzados() {
 
         // PASO 4: Ir juego por juego buscando en las distintas tiendas
         for (const juego of juegos) {
-            console.log(`\n⚖️ Buscando comparaciones para: ${juego.nombre}...`);
+            console.log(`\nBuscando comparaciones para: ${juego.nombre}...`);
 
-            // --- 🏪 TIENDA 1: BUSCAR EN GOG ---
+            // --- TIENDA 1: BUSCAR EN GOG ---
             try {
                 // Buscamos el nombre del juego en el buscador oficial de GOG
                 const gogSearchUrl = `https://catalog.gog.com/v1/catalog?limit=1&q=${encodeURIComponent(juego.nombre)}`;
@@ -68,11 +68,11 @@ async function sincronizarPreciosCruzados() {
                         ultima_actualizacion: new Date().toISOString()
                     }, { onConflict: 'juego_id,tienda_id' });
 
-                    console.log(`✅ GOG: $${precioActual} encontrado.`);
+                    console.log(`GOG: $${precioActual} encontrado.`);
                 }
-            } catch (e) { console.error('❌ Error buscando en GOG'); }
+            } catch (e) { console.error('Error buscando en GOG'); }
 
-            // --- 🏪 TIENDA 2: BUSCAR EN STEAM ---
+            // --- TIENDA 2: BUSCAR EN STEAM ---
             try {
                 const steamSearchUrl = `https://store.steampowered.com/api/storesearch/?term=${encodeURIComponent(juego.nombre)}&l=spanish&cc=US`;
                 const resSteam = await fetch(steamSearchUrl);
@@ -100,13 +100,13 @@ async function sincronizarPreciosCruzados() {
                                 url_oferta: `https://store.steampowered.com/app/${appId}`,
                                 ultima_actualizacion: new Date().toISOString()
                             }, { onConflict: 'juego_id,tienda_id' });
-                            console.log(`✅ Steam: $${price.final / 100} encontrado.`);
+                            console.log(`Steam: $${price.final / 100} encontrado.`);
                         }
                     }
                 }
-            } catch (e) { console.error('❌ Error buscando en Steam'); }
+            } catch (e) { console.error('Error buscando en Steam'); }
 
-            // --- 🏪 TIENDA 3: BUSCAR EN EPIC GAMES (Vía CheapShark) ---
+            // --- TIENDA 3: BUSCAR EN EPIC GAMES (Vía CheapShark) ---
             try {
                 if (storeMap['epic']) {
                     const epicSearchUrl = `https://www.cheapshark.com/api/1.0/deals?storeID=25&title=${encodeURIComponent(juego.nombre)}`;
@@ -135,12 +135,12 @@ async function sincronizarPreciosCruzados() {
                             ultima_actualizacion: new Date().toISOString()
                         }, { onConflict: 'juego_id,tienda_id' });
 
-                        console.log(`✅ Epic Games: $${precioActual} encontrado.`);
+                        console.log(`Epic Games: $${precioActual} encontrado.`);
                     }
                 }
-            } catch (e) { console.error('❌ Error buscando en Epic Games'); }
+            } catch (e) { console.error('Error buscando en Epic Games'); }
 
-            // --- 🏪 TIENDA 4: BUSCAR EN GAMESPLANET ---
+            // --- TIENDA 4: BUSCAR EN GAMESPLANET ---
             try {
                 if (storeMap['gamesplanet']) {
                     // Gamesplanet no tiene una API tan fácil, así que descargamos la página 
@@ -178,14 +178,14 @@ async function sincronizarPreciosCruzados() {
                                     ultima_actualizacion: new Date().toISOString()
                                 }, { onConflict: 'juego_id,tienda_id' });
 
-                                console.log(`✅ Gamesplanet: $${precioActual} encontrado.`);
+                                console.log(`Gamesplanet: $${precioActual} encontrado.`);
                             }
                         }
                     }
                 }
-            } catch (e) { console.error('❌ Error buscando en Gamesplanet'); }
+            } catch (e) { console.error('Error buscando en Gamesplanet'); }
 
-            // --- 🏪 TIENDA 5: BUSCAR EN GAMERSGATE ---
+            // --- TIENDA 5: BUSCAR EN GAMERSGATE ---
             try {
                 if (storeMap['gamersgate']) {
                     // Igual que Gamesplanet, tenemos que descargar la página y "leer" el HTML.
@@ -221,24 +221,24 @@ async function sincronizarPreciosCruzados() {
                                     ultima_actualizacion: new Date().toISOString()
                                 }, { onConflict: 'juego_id,tienda_id' });
 
-                                console.log(`✅ GamersGate: $${precioActual} encontrado.`);
+                                console.log(`GamersGate: $${precioActual} encontrado.`);
                             }
                         }
                     }
                 }
-            } catch (e) { console.error('❌ Error buscando en GamersGate'); }
+            } catch (e) { console.error('Error buscando en GamersGate'); }
 
             // PASO 5: Descanso obligatorio
             // Después de buscar un juego en las 5 tiendas, esperamos 10 segundos 
             // antes de pasar al siguiente juego para no saturarlas.
-            console.log('⏳ Esperando 10 segundos para no saturar las tiendas...');
+            console.log('Esperando 10 segundos para no saturar las tiendas...');
             await new Promise(r => setTimeout(r, 10000));
         }
 
-        console.log('\n✨ Misión cumplida. Sincronización cruzada finalizada.');
+        console.log('\nMisión cumplida. Sincronización cruzada finalizada.');
 
     } catch (error) {
-        console.error('💥 Error fatal:', error);
+        console.error('Error fatal:', error);
     }
 }
 

@@ -1,5 +1,5 @@
 /* =========================================================================
-   🤖 WORKER DE EPIC GAMES (EL TRABAJADOR DE OFERTAS)
+   WORKER DE EPIC GAMES (EL TRABAJADOR DE OFERTAS)
    =========================================================================
    Explicación sencilla:
    A diferencia del de Steam, Epic Games es muy cerrado y no nos deja 
@@ -38,7 +38,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 const CHEAPSHARK_EPIC_URL = 'https://www.cheapshark.com/api/1.0/deals?storeID=25';
 
 async function actualizarJuegosEpic() {
-    console.log('🚀 Buscando ofertas de Epic Games a través de CheapShark...');
+    console.log('Buscando ofertas de Epic Games a través de CheapShark...');
 
     try {
         // PASO 4: Buscar el código interno que usamos nosotros para "Epic" en la base de datos
@@ -57,7 +57,7 @@ async function actualizarJuegosEpic() {
 
         const games = await response.json(); // Transformar el texto en una lista fácil de leer (JSON)
 
-        console.log(`📡 CheapShark reporta ${games.length} juegos con oferta activa en Epic Games.`);
+        console.log(`CheapShark reporta ${games.length} juegos con oferta activa en Epic Games.`);
 
         // PASO 6: Repetir (Bucle) el proceso para cada juego de la lista que nos dieron
         for (const game of games) {
@@ -70,7 +70,7 @@ async function actualizarJuegosEpic() {
             // Usamos un enlace especial que nos lleva directo a la oferta
             const urlOferta = `https://www.cheapshark.com/redirect?dealID=${game.dealID}`;
 
-            console.log(`🔍 Procesando: ${title}...`);
+            console.log(`Procesando: ${title}...`);
 
             // PASO 7: ¿Conocemos este juego?
             // Buscamos en nuestra base de datos si ya tenemos un juego con exactamente este nombre (ignorando mayúsculas)
@@ -98,7 +98,7 @@ async function actualizarJuegosEpic() {
                     .select().single();
 
                 if (createError) {
-                    console.error(`❌ Error creando juego ${title}:`, createError.message);
+                    console.error(`Error creando juego ${title}:`, createError.message);
                     continue; // Si hubo un error, pasa al siguiente juego sin detener todo
                 }
                 juegoId = nuevoJuego.id;
@@ -119,16 +119,16 @@ async function actualizarJuegosEpic() {
                 }, { onConflict: 'juego_id,tienda_id' }); // Esto evita que se dupliquen los precios
 
             if (priceError) {
-                console.error(`❌ Error guardando precio de ${title}:`, priceError.message);
+                console.error(`Error guardando precio de ${title}:`, priceError.message);
             } else {
-                console.log(`✅ ${title}: $${precioActual} (-${descuento}%)`);
+                console.log(`${title}: $${precioActual} (-${descuento}%)`);
             }
         }
 
-        console.log('✨ Misión cumplida. Actualización de Epic Games finalizada.');
+        console.log('Misión cumplida. Actualización de Epic Games finalizada.');
 
     } catch (error) {
-        console.error('💥 Error fatal en worker de Epic:', error.message);
+        console.error('Error fatal en worker de Epic:', error.message);
     }
 }
 

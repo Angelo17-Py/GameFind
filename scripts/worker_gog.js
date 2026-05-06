@@ -1,5 +1,5 @@
 /* =========================================================================
-   🤖 WORKER DE GOG (EL TRABAJADOR DE "GOOD OLD GAMES")
+   WORKER DE GOG (EL TRABAJADOR DE "GOOD OLD GAMES")
    =========================================================================
    Explicación sencilla:
    A este trabajador lo mandamos directo al catálogo oficial de la tienda 
@@ -38,7 +38,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 const GOG_CATALOG_URL = 'https://catalog.gog.com/v1/catalog?limit=50&order=desc:trending&productType=in:game&price=asc:0';
 
 async function actualizarPreciosGOG() {
-    console.log('🚀 Iniciando actualización de precios de GOG...');
+    console.log('Iniciando actualización de precios de GOG...');
 
     try {
         // PASO 4: Buscar el código interno que usamos nosotros para "GOG" en la base de datos
@@ -58,7 +58,7 @@ async function actualizarPreciosGOG() {
         const data = await response.json(); // Transformar en formato leíble (JSON)
         const products = data.products || [];
 
-        console.log(`📡 GOG reporta ${products.length} productos destacados.`);
+        console.log(`GOG reporta ${products.length} productos destacados.`);
 
         // PASO 6: Empezar a revisar la lista juego por juego
         for (const item of products) {
@@ -68,7 +68,7 @@ async function actualizarPreciosGOG() {
             // Tratamos de conseguir la mejor foto del juego (preferiblemente en formato vertical)
             const imageUrl = item.coverVertical || item.images?.main;
 
-            console.log(`🔍 Procesando en GOG: ${title}...`);
+            console.log(`Procesando en GOG: ${title}...`);
 
             // Asegurar que la dirección de la foto esté completa y funcione
             const cleanImageUrl = imageUrl?.startsWith('//') ? `https:${imageUrl}` : imageUrl;
@@ -100,7 +100,7 @@ async function actualizarPreciosGOG() {
                     .single();
 
                 if (createError) {
-                    console.error(`❌ Error creando juego ${title}:`, createError.message);
+                    console.error(`Error creando juego ${title}:`, createError.message);
                     continue; // Si falla, sigue con el próximo juego
                 }
                 juegoId = nuevoJuego.id;
@@ -118,7 +118,7 @@ async function actualizarPreciosGOG() {
 
             // Si por algún motivo el precio viene roto (no es un número), lo saltamos
             if (isNaN(precioActual)) {
-                console.warn(`⚠️ No se pudo obtener el precio para ${title}. Saltando...`);
+                console.warn(`No se pudo obtener el precio para ${title}. Saltando...`);
                 continue;
             }
 
@@ -138,16 +138,16 @@ async function actualizarPreciosGOG() {
                 }, { onConflict: 'juego_id,tienda_id' }); // Esto evita tener precios duplicados para el mismo juego y tienda
 
             if (priceError) {
-                console.error(`❌ Error guardando precio de ${title}:`, priceError.message);
+                console.error(`Error guardando precio de ${title}:`, priceError.message);
             } else {
-                console.log(`✅ ${title}: $${precioActual} (-${descuento}%)`);
+                console.log(`${title}: $${precioActual} (-${descuento}%)`);
             }
         }
 
-        console.log('✨ Misión cumplida. Actualización de GOG finalizada.');
+        console.log('Misión cumplida. Actualización de GOG finalizada.');
 
     } catch (error) {
-        console.error('💥 Error fatal en worker de GOG:', error.message);
+        console.error('Error fatal en worker de GOG:', error.message);
     }
 }
 

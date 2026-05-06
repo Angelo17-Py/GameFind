@@ -15,7 +15,7 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 async function descubrirOfertasSteam() {
-    console.log('🔍 Extrayendo el TOP 200 de los juegos más jugados de Steam...');
+    console.log('Extrayendo el TOP 200 de los juegos más jugados de Steam...');
     
     try {
         const { data: tiendaSteam } = await supabase
@@ -28,11 +28,11 @@ async function descubrirOfertasSteam() {
         const TIENDA_STEAM_ID = tiendaSteam.id;
 
         // Extraer Top 100 últimas 2 semanas y Top 100 de toda la historia
-        console.log('📡 Consultando SteamSpy API (Top In 2 Weeks)...');
+        console.log('Consultando SteamSpy API (Top In 2 Weeks)...');
         const res2Weeks = await fetch('https://steamspy.com/api.php?request=top100in2weeks');
         const data2Weeks = await res2Weeks.json();
 
-        console.log('📡 Consultando SteamSpy API (Top Forever)...');
+        console.log('Consultando SteamSpy API (Top Forever)...');
         const resForever = await fetch('https://steamspy.com/api.php?request=top100forever');
         const dataForever = await resForever.json();
 
@@ -43,7 +43,7 @@ async function descubrirOfertasSteam() {
         Object.values(dataForever).forEach(game => juegosMap.set(game.appid, game));
 
         const juegosUnicos = Array.from(juegosMap.values());
-        console.log(`\n✅ Se han recolectado ${juegosUnicos.length} juegos Top de Steam. Insertando en la BD...`);
+        console.log(`\nSe han recolectado ${juegosUnicos.length} juegos Top de Steam. Insertando en la BD...`);
 
         for (const item of juegosUnicos) {
             const appId = item.appid.toString();
@@ -51,7 +51,7 @@ async function descubrirOfertasSteam() {
             // Steam usa este formato oficial de imágenes
             const imageUrl = `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appId}/header.jpg`;
             
-            console.log(`✨ Procesando: ${title}`);
+            console.log(`Procesando: ${title}`);
             
             // 3. Guardar/Actualizar el juego (Matching por AppID porque es 100% seguro)
             const { data: juegoGuardado, error: gameError } = await supabase
@@ -66,7 +66,7 @@ async function descubrirOfertasSteam() {
                 .single();
 
             if (gameError) {
-                console.error(`❌ Error con el juego ${title}:`, gameError.message);
+                console.error(`Error con el juego ${title}:`, gameError.message);
                 continue;
             }
 
@@ -89,14 +89,14 @@ async function descubrirOfertasSteam() {
                 }, { onConflict: 'juego_id,tienda_id' });
 
             if (priceError) {
-                console.error(`❌ Error guardando precio de ${title}:`, priceError.message);
+                console.error(`Error guardando precio de ${title}:`, priceError.message);
             }
         }
 
-        console.log('\n✨ Inyección del TOP 200 de Steam finalizada exitosamente.');
+        console.log('\nInyección del TOP 200 de Steam finalizada exitosamente.');
 
     } catch (error) {
-        console.error('💥 Error en el descubrimiento:', error);
+        console.error('Error en el descubrimiento:', error);
     }
 }
 
