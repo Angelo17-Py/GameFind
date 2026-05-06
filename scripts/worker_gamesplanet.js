@@ -1,5 +1,5 @@
 /* =========================================================================
-   🤖 WORKER DE GAMESPLANET (EL LECTOR DE PÁGINAS 2)
+   WORKER DE GAMESPLANET (EL LECTOR DE PÁGINAS 2)
    =========================================================================
    Explicación sencilla:
    Al igual que GamersGate, Gamesplanet no tiene un acceso fácil de base 
@@ -36,7 +36,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 const GAMESPLANET_OFFERS_URL = 'https://us.gamesplanet.com/games/offers';
 
 async function actualizarPreciosGamesplanet() {
-    console.log('🚀 Iniciando actualización de precios de Gamesplanet...');
+    console.log('Iniciando actualización de precios de Gamesplanet...');
 
     try {
         // PASO 2: Obtener el ID de la tienda Gamesplanet en nuestra base de datos
@@ -96,11 +96,11 @@ async function actualizarPreciosGamesplanet() {
             }
         });
 
-        console.log(`📡 Gamesplanet reporta ${games.length} juegos en oferta.`);
+        console.log(`Gamesplanet reporta ${games.length} juegos en oferta.`);
 
         // PASO 6: Pasar la información de la lista a nuestra base de datos (Supabase)
         for (const game of games) {
-            console.log(`🔍 Procesando en Gamesplanet: ${game.title}...`);
+            console.log(`Procesando en Gamesplanet: ${game.title}...`);
 
             // Buscamos si ya conocemos este juego
             let { data: juegoExistente } = await supabase
@@ -128,7 +128,7 @@ async function actualizarPreciosGamesplanet() {
                     .single();
 
                 if (createError) {
-                    console.error(`❌ Error creando juego ${game.title}:`, createError.message);
+                    console.error(`Error creando juego ${game.title}:`, createError.message);
                     continue; // Si falla, pasa al siguiente
                 }
                 juegoId = nuevoJuego.id;
@@ -146,13 +146,13 @@ async function actualizarPreciosGamesplanet() {
                 ultima_actualizacion: new Date().toISOString()
             }, { onConflict: 'juego_id,tienda_id' });
 
-            console.log(`✅ ${game.title}: $${game.precioActual} (-${game.descuento}%)`);
+            console.log(`${game.title}: $${game.precioActual} (-${game.descuento}%)`);
         }
 
-        console.log('✨ Misión cumplida. Actualización de Gamesplanet finalizada.');
+        console.log('Misión cumplida. Actualización de Gamesplanet finalizada.');
 
     } catch (error) {
-        console.error('💥 Error fatal en worker de Gamesplanet:', error.message);
+        console.error('Error fatal en worker de Gamesplanet:', error.message);
     }
 }
 

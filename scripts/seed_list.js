@@ -21,10 +21,10 @@ const gamesList = [
 ];
 
 async function seedGamesList() {
-    console.log(`🚀 Iniciando inyección de ${gamesList.length} juegos en la base de datos...`);
+    console.log(`Iniciando inyección de ${gamesList.length} juegos en la base de datos...`);
 
     for (const title of gamesList) {
-        console.log(`\n🔍 Buscando: ${title}...`);
+        console.log(`\nBuscando: ${title}...`);
         
         // 1. Verificamos si ya existe
         const { data: existingGame } = await supabase
@@ -34,7 +34,7 @@ async function seedGamesList() {
             .maybeSingle();
 
         if (existingGame) {
-            console.log(`⚠️  ${title} ya existe en la BD. Saltando...`);
+            console.log(`${title} ya existe en la BD. Saltando...`);
             continue;
         }
 
@@ -77,16 +77,16 @@ async function seedGamesList() {
             });
 
         if (insertError) {
-            console.error(`❌ Error insertando ${title}:`, insertError.message);
+            console.error(`Error insertando ${title}:`, insertError.message);
         } else {
-            console.log(`✅ ${title} agregado a la base de datos.`);
+            console.log(`${title} agregado a la base de datos.`);
         }
         
         // Delay para no saturar APIs
         await new Promise(r => setTimeout(r, 1000));
     }
     
-    console.log('\n✨ Inyección de los 50 juegos finalizada.');
+    console.log('\nInyección de los 50 juegos finalizada.');
 }
 
 seedGamesList();

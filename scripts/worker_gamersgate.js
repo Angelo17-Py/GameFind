@@ -1,5 +1,5 @@
 /* =========================================================================
-   🤖 WORKER DE GAMERSGATE (EL LECTOR DE PÁGINAS)
+   WORKER DE GAMERSGATE (EL LECTOR DE PÁGINAS)
    =========================================================================
    Explicación sencilla:
    GamersGate no tiene una conexión directa (API) fácil de usar.
@@ -32,7 +32,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const TIENDA_GG_ID = '4f9de5bc-6b7a-4fc6-94da-cf081bdc7d13';
 
 async function scrapeGamersGate() {
-    console.log('🚀 Iniciando actualización de precios de GamersGate...');
+    console.log('Iniciando actualización de precios de GamersGate...');
     try {
         // PASO 2: Descargar la "revista" de ofertas
         const response = await fetch('https://www.gamersgate.com/offers/');
@@ -71,11 +71,11 @@ async function scrapeGamersGate() {
             }
         });
 
-        console.log(`📡 GamersGate reporta ${games.length} juegos en la primera página de ofertas.`);
+        console.log(`GamersGate reporta ${games.length} juegos en la primera página de ofertas.`);
 
         // PASO 5: Pasar la información de la lista temporal a nuestra base de datos
         for (const game of games) {
-            console.log(`🔍 Procesando en GamersGate: ${game.title}...`);
+            console.log(`Procesando en GamersGate: ${game.title}...`);
 
             // Buscamos si ya conocemos este juego
             let { data: juegoExistente } = await supabase
@@ -105,7 +105,7 @@ async function scrapeGamersGate() {
                     .single();
 
                 if (createError) {
-                    console.error(`❌ Error creando juego ${game.title}:`, createError.message);
+                    console.error(`Error creando juego ${game.title}:`, createError.message);
                     continue; // Si hay error, pasamos al siguiente
                 }
                 juegoId = nuevoJuego.id;
@@ -124,15 +124,15 @@ async function scrapeGamersGate() {
             }, { onConflict: 'juego_id,tienda_id' }); // Para evitar duplicados
 
             if (priceError) {
-                console.error(`❌ Error guardando precio para ${game.title}:`, priceError.message);
+                console.error(`Error guardando precio para ${game.title}:`, priceError.message);
             } else {
-                console.log(`✅ ${game.title}: $${game.precioActual} (-${game.descuento}%)`);
+                console.log(`${game.title}: $${game.precioActual} (-${game.descuento}%)`);
             }
         }
 
-        console.log('✨ Misión cumplida. Actualización de GamersGate finalizada.');
+        console.log('Misión cumplida. Actualización de GamersGate finalizada.');
     } catch (error) {
-        console.error('💥 Error fatal en GamersGate scraper:', error);
+        console.error('Error fatal en GamersGate scraper:', error);
     }
 }
 

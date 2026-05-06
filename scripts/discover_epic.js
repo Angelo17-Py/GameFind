@@ -15,7 +15,7 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 async function descubrirTopJuegosEpic() {
-    console.log('🚀 Extrayendo el TOP 100 de mejores juegos de Epic Games...');
+    console.log('Extrayendo el TOP 100 de mejores juegos de Epic Games...');
 
     try {
         const { data: tiendaEpic } = await supabase
@@ -32,13 +32,13 @@ async function descubrirTopJuegosEpic() {
         // Extraemos las 2 primeras páginas (50 resultados cada una)
         for (let page = 0; page < 2; page++) {
             const url = `https://www.cheapshark.com/api/1.0/deals?storeID=25&sortBy=SteamRating&pageSize=50&pageNumber=${page}`;
-            console.log(`📡 Consultando página ${page + 1}...`);
+            console.log(`Consultando página ${page + 1}...`);
             const response = await fetch(url);
             const games = await response.json();
             allGames = allGames.concat(games);
         }
 
-        console.log(`\n✅ Se han recolectado ${allGames.length} juegos Top de Epic. Insertando en la BD...`);
+        console.log(`\nSe han recolectado ${allGames.length} juegos Top de Epic. Insertando en la BD...`);
 
         for (const game of allGames) {
             const title = game.title;
@@ -70,7 +70,7 @@ async function descubrirTopJuegosEpic() {
                     .select().single();
 
                 if (createError) {
-                    console.error(`❌ Error creando juego ${title}:`, createError.message);
+                    console.error(`Error creando juego ${title}:`, createError.message);
                     continue;
                 }
                 juegoId = nuevoJuego.id;
@@ -90,16 +90,16 @@ async function descubrirTopJuegosEpic() {
                 }, { onConflict: 'juego_id,tienda_id' });
 
             if (priceError) {
-                console.error(`❌ Error guardando precio de ${title}:`, priceError.message);
+                console.error(`Error guardando precio de ${title}:`, priceError.message);
             } else {
-                console.log(`🎮 Registrado: ${title} -> $${precioActual} (-${descuento}%)`);
+                console.log(`Registrado: ${title} -> $${precioActual} (-${descuento}%)`);
             }
         }
 
-        console.log('\n✨ Descubrimiento del Top 100 finalizado exitosamente.');
+        console.log('\nDescubrimiento del Top 100 finalizado exitosamente.');
 
     } catch (error) {
-        console.error('💥 Error fatal en discover_epic:', error.message);
+        console.error('Error fatal en discover_epic:', error.message);
     }
 }
 
