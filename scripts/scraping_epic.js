@@ -1,20 +1,3 @@
-/* =========================================================================
-   WORKER DE EPIC GAMES (EL TRABAJADOR DE OFERTAS)
-   =========================================================================
-   Explicación sencilla:
-   A diferencia del de Steam, Epic Games es muy cerrado y no nos deja 
-   preguntarle los precios fácilmente.
-   Así que este trabajador usa un atajo: le pregunta a una página de ofertas 
-   llamada "CheapShark" que ya hizo el trabajo difícil por nosotros.
-   
-   ¿Cómo trabaja?
-   1. Se conecta a nuestra base de datos.
-   2. Le pide a CheapShark la lista de todas las ofertas actuales de Epic Games.
-   3. Revisa cada juego en oferta:
-      - Si ya lo tenemos en la base de datos, simplemente le actualiza el precio.
-      - Si es un juego nuevo, lo anota por primera vez con su foto.
-   ========================================================================= */
-
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 
@@ -128,9 +111,9 @@ async function actualizarJuegosEpic() {
         console.log('Misión cumplida. Actualización de Epic Games finalizada.');
 
     } catch (error) {
-        console.error('Error fatal en worker de Epic:', error.message);
+        console.error('Error fatal en scraping de Epic:', error.message);
     }
 }
 
-// ¡A trabajar! Esta es la orden final que enciende el worker.
+// ¡A trabajar! Esta es la orden final que enciende el scraping.
 actualizarJuegosEpic();

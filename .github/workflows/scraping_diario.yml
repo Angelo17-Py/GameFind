@@ -1,4 +1,4 @@
-name: Daily Game Scraping
+name: Scraping Diario De Juegos
 
 on:
   schedule:
@@ -17,11 +17,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Instalar dependencias
         run: npm install
 
-      - name: Run Scraping
+      - name: Ejecutar scraping
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-        run: npm run scrap:update-all
+        run: npm run scraping:actualizar-todo

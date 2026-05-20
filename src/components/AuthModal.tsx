@@ -39,14 +39,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
                 <div className="space-y-4">
                     <Link 
-                        to="/login"
+                        to="/entrar"
                         className="block w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black uppercase tracking-widest py-4 rounded-2xl text-center shadow-lg shadow-purple-500/20 hover:brightness-110 transition-all"
                     >
                         Iniciar Sesión
                     </Link>
                     
                     <Link 
-                        to="/register"
+                        to="/registro"
                         className="block w-full bg-white/5 border border-white/10 text-white font-black uppercase tracking-widest py-4 rounded-2xl text-center hover:bg-white/10 transition-all"
                     >
                         Crear Cuenta

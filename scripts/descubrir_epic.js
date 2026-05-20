@@ -99,7 +99,7 @@ async function descubrirTopJuegosEpic() {
         console.log('\nDescubrimiento del Top 100 finalizado exitosamente.');
 
     } catch (error) {
-        console.error('Error fatal en discover_epic:', error.message);
+        console.error('Error fatal en descubrir_epic:', error.message);
     }
 }
 

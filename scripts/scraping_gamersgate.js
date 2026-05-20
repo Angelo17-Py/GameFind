@@ -1,21 +1,3 @@
-/* =========================================================================
-   WORKER DE GAMERSGATE (EL LECTOR DE PÁGINAS)
-   =========================================================================
-   Explicación sencilla:
-   GamersGate no tiene una conexión directa (API) fácil de usar.
-   Así que nuestro trabajador hace algo diferente: descarga la página web 
-   entera como si fuera una revista y se pone a leer el código de la 
-   página para buscar dónde están los precios. A esto se le llama "Scraping".
-   
-   ¿Cómo trabaja?
-   1. Se conecta a nuestra base de datos.
-   2. Descarga la página principal de ofertas de GamersGate.
-   3. Usa una lupa especial (llamada "cheerio") para revisar todo el texto 
-      de la página y encontrar las cajitas donde aparecen los juegos.
-   4. Recorta la información: título, precio viejo, precio nuevo y foto.
-   5. Lo anota todo en nuestra base de datos.
-   ========================================================================= */
-
 import { createClient } from '@supabase/supabase-js';
 import * as cheerio from 'cheerio'; // Esta es nuestra "lupa" para leer páginas web
 import dotenv from 'dotenv';
@@ -136,5 +118,5 @@ async function scrapeGamersGate() {
     }
 }
 
-// ¡A trabajar! Esta es la orden final que enciende el worker.
+// ¡A trabajar! Esta es la orden final que enciende el scraping.
 scrapeGamersGate();

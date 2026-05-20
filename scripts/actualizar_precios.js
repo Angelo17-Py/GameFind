@@ -1,18 +1,3 @@
-/* =========================================================================
-   WORKER DE SINCRONIZACIÓN (EL SUPERVISOR GENERAL)
-   =========================================================================
-   Explicación sencilla:
-   Este es el "Jefe de Operaciones". En lugar de ir tienda por tienda 
-   preguntando qué juegos tienen en oferta, este trabajador hace algo mejor:
-   
-   ¿Cómo trabaja?
-   1. Toma nuestra base de datos y dice: "A ver, tengo el juego 'GTA V'".
-   2. Luego va a GOG, Steam, Epic Games, etc., y busca específicamente "GTA V".
-   3. Si lo encuentra en esas tiendas, anota cuánto cuesta en cada una.
-   4. Así podemos comparar en qué tienda está más barato el mismo juego.
-   5. Como siempre, se toma 10 segundos de descanso entre juego y juego.
-   ========================================================================= */
-
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import * as cheerio from 'cheerio'; // Herramienta para leer páginas web que no tienen API fácil

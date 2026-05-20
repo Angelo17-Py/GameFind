@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import SocialLogin from '../components/SocialLogin'
 
@@ -42,7 +42,7 @@ function Register() {
 
             if (error) throw error
             alert('¡Registro exitoso! Por favor verifica tu correo electrónico.')
-            navigate('/login')
+            navigate('/entrar')
         } catch (err: any) {
             setError(err.message || 'Error al registrarse')
         } finally {
@@ -58,7 +58,7 @@ function Register() {
             heroSubtitle="Crea tu cuenta gratis y empieza a ahorrar en tus videojuegos favoritos hoy mismo."
             switchText="¿Ya tienes cuenta?"
             switchLinkText="Inicia sesión"
-            switchLink="/login"
+            switchLink="/entrar"
         >
             {error && (
                 <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-sm font-medium" role="alert">

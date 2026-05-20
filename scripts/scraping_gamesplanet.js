@@ -1,20 +1,3 @@
-/* =========================================================================
-   WORKER DE GAMESPLANET (EL LECTOR DE PÁGINAS 2)
-   =========================================================================
-   Explicación sencilla:
-   Al igual que GamersGate, Gamesplanet no tiene un acceso fácil de base 
-   de datos. Así que usamos la misma estrategia: descargar la página como 
-   una revista y ponernos a leer su código con nuestra "lupa" (cheerio).
-   
-   ¿Cómo trabaja?
-   1. Se conecta a nuestra base de datos.
-   2. Descarga la página principal de ofertas de Gamesplanet. Se disfraza 
-      un poco de "Navegador normal" (User-Agent) para que no lo bloqueen.
-   3. Con la lupa recorta de la página los datos importantes: Título, 
-      precios y la foto de cada juego.
-   4. Lo anota o actualiza todo en nuestra base de datos.
-   ========================================================================= */
-
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import * as cheerio from 'cheerio'; // La "lupa" para leer el código de la web
@@ -152,9 +135,9 @@ async function actualizarPreciosGamesplanet() {
         console.log('Misión cumplida. Actualización de Gamesplanet finalizada.');
 
     } catch (error) {
-        console.error('Error fatal en worker de Gamesplanet:', error.message);
+        console.error('Error fatal en scraping de Gamesplanet:', error.message);
     }
 }
 
-// ¡A trabajar! Esta es la orden final que enciende el worker.
+// ¡A trabajar! Esta es la orden final que enciende el scraping.
 actualizarPreciosGamesplanet();

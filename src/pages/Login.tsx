@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import SocialLogin from '../components/SocialLogin'
 
@@ -44,7 +44,7 @@ function Login() {
             heroSubtitle="Compara precios en todas las tiendas y consigue tus videojuegos favoritos al mejor costo."
             switchText="¿No tienes cuenta?"
             switchLinkText="Regístrate"
-            switchLink="/register"
+            switchLink="/registro"
         >
             {error && (
                 <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-sm font-medium" role="alert">

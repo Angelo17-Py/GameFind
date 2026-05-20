@@ -1,18 +1,3 @@
-/* =========================================================================
-   WORKER DE STEAM (EL TRABAJADOR AUTOMÁTICO)
-   =========================================================================
-   Explicación sencilla:
-   Imaginemos que este código es un empleado (un "worker" o trabajador) que 
-   mandamos a la tienda de Steam a revisar los precios por nosotros.
-   
-   ¿Cómo trabaja?
-   1. Se conecta a nuestra base de datos de Supabase.
-   2. Busca en nuestra base de datos todos los juegos que sabemos que están en Steam.
-   3. Va a la tienda virtual de Steam y pregunta el precio de cada uno (usando una API).
-   4. Anota los precios nuevos en nuestra base de datos y guarda la foto del juego.
-   5. Descansa 10 segundos entre cada juego para que Steam no piense que somos un robot malo y nos bloquee.
-   ========================================================================= */
-
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 
@@ -149,7 +134,6 @@ async function actualizarPreciosSteam() {
         }
 
         // PASO 10: El descanso obligatorio. 
-        // El trabajador se toma un café por 10 segundos antes de ir al siguiente juego.
         // Sin esto, Steam nos banearía (nos echaría de la tienda por hacer muchas preguntas muy rápido).
         console.log(`Tomando un descanso de ${ESPERA_MS / 1000} segundos para no saturar a Steam...`);
         await esperar(ESPERA_MS);
@@ -158,6 +142,6 @@ async function actualizarPreciosSteam() {
     console.log('Misión cumplida. Actualización de Steam finalizada.');
 }
 
-// ¡A trabajar! Esta es la orden final que enciende el worker.
+// Esta es la orden final que enciende el scraping.
 actualizarPreciosSteam();
 

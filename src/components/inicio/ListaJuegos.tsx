@@ -1,15 +1,15 @@
 import React from 'react'
-import type { Game } from '../../hooks/useDeals'
-import { GameCard } from './GameCard'
+import type { Game } from '../../hooks/useOfertas'
+import { TarjetaJuego } from './TarjetaJuego'
 
-interface GameListProps {
+interface ListaJuegosProps {
     games: Game[]
     favorites: string[]
     onToggleFavorite: (game: Game) => void
     loading: boolean
 }
 
-export const GameList: React.FC<GameListProps> = ({ games, favorites, onToggleFavorite, loading }) => {
+export const ListaJuegos: React.FC<ListaJuegosProps> = ({ games, favorites, onToggleFavorite, loading }) => {
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center py-20 gap-4" aria-live="polite">
@@ -30,7 +30,7 @@ export const GameList: React.FC<GameListProps> = ({ games, favorites, onToggleFa
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
             {games.map(game => (
-                <GameCard 
+                <TarjetaJuego 
                     key={game.id} 
                     game={game} 
                     isFavorite={favorites.includes(game.id)} 

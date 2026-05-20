@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import type { User } from '@supabase/supabase-js'
-import Navbar from '../components/Navbar'
-import { useEnrichedFavorites } from '../hooks/useEnrichedFavorites'
+import { useFavoritosEnriquecidos } from '../hooks/useFavoritosEnriquecidos'
 
 import { MainLayout } from '../components/MainLayout'
 
-function Favorites() {
+function Favoritos() {
     const [user, setUser] = useState<User | null>(null)
-    const { favorites, loading, fetchFavorites, removeFavorite } = useEnrichedFavorites(user?.id)
+    const { favorites, loading, fetchFavorites, removeFavorite } = useFavoritosEnriquecidos(user?.id)
 
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => {
@@ -102,5 +101,4 @@ function Favorites() {
 }
 
 
-export default Favorites
-
+export default Favoritos

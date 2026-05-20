@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
-export function useFavorites(userId: string | undefined) {
+export function useFavoritos(userId: string | undefined) {
     const [favorites, setFavorites] = useState<string[]>([])
     const [loading, setLoading] = useState(false)
 

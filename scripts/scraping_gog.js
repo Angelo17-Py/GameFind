@@ -1,20 +1,3 @@
-/* =========================================================================
-   WORKER DE GOG (EL TRABAJADOR DE "GOOD OLD GAMES")
-   =========================================================================
-   Explicación sencilla:
-   A este trabajador lo mandamos directo al catálogo oficial de la tienda 
-   GOG a revisar qué hay de nuevo.
-   
-   ¿Cómo trabaja?
-   1. Se conecta a nuestra base de datos.
-   2. Va al catálogo de GOG y le pide una lista de los 50 juegos más 
-      populares o en tendencia de este momento.
-   3. Revisa juego por juego. Si encontramos un juego nuevo que no 
-      conocíamos, lo anota en la base de datos con su foto de portada.
-   4. Anota los precios. A veces GOG no dice el porcentaje de descuento, 
-      así que nuestro empleado usa una calculadora para sacarlo él mismo.
-   ========================================================================= */
-
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 
@@ -147,9 +130,9 @@ async function actualizarPreciosGOG() {
         console.log('Misión cumplida. Actualización de GOG finalizada.');
 
     } catch (error) {
-        console.error('Error fatal en worker de GOG:', error.message);
+        console.error('Error fatal en scraping de GOG:', error.message);
     }
 }
 
-// ¡A trabajar! Esta es la orden final que enciende el worker.
+// ¡A trabajar! Esta es la orden final que enciende el scraping.
 actualizarPreciosGOG();

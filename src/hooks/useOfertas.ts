@@ -27,7 +27,7 @@ const STORE_MAP: Record<string, { name: string, logo: string }> = {
     "gamersgate": { name: "GamersGate", logo: "https://www.gamersgate.com/static/images/logo.svg" }
 }
 
-export function useDeals() {
+export function useOfertas() {
     const [games, setGames] = useState<Game[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)

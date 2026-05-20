@@ -9,7 +9,7 @@ export interface EnrichedFavorite {
     dealUrl: string
 }
 
-export function useEnrichedFavorites(userId: string | undefined) {
+export function useFavoritosEnriquecidos(userId: string | undefined) {
     const [favorites, setFavorites] = useState<EnrichedFavorite[]>([])
     const [loading, setLoading] = useState(false)
 

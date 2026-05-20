@@ -1,12 +1,12 @@
 import React from 'react'
 
-interface StoreSelectorProps {
+interface SelectorTiendasProps {
     storeMap: Record<string, { name: string, logo: string }>
     selectedStore: string
     onStoreChange: (id: string) => void
 }
 
-export const StoreSelector: React.FC<StoreSelectorProps> = ({ storeMap, selectedStore, onStoreChange }) => {
+export const SelectorTiendas: React.FC<SelectorTiendasProps> = ({ storeMap, selectedStore, onStoreChange }) => {
     return (
         <div className="flex flex-col items-center mb-12">
             <h2 className="text-2xl md:text-4xl font-black mb-8 uppercase tracking-tighter text-center">

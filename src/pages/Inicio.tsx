@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import type { User } from '@supabase/supabase-js'
-import Navbar from '../components/Navbar'
 import AuthModal from '../components/AuthModal'
-import { useDeals } from '../hooks/useDeals'
-import { useFavorites } from '../hooks/useFavorites'
-import { Hero } from '../components/home/Hero'
-import { StoreSelector } from '../components/home/StoreSelector'
-import { GameList } from '../components/home/GameList'
+import { useOfertas } from '../hooks/useOfertas'
+import { useFavoritos } from '../hooks/useFavoritos'
+import { Hero } from '../components/inicio/Hero'
+import { SelectorTiendas } from '../components/inicio/SelectorTiendas'
+import { ListaJuegos } from '../components/inicio/ListaJuegos'
 
 import { MainLayout } from '../components/MainLayout'
 
-function Home() {
+function Inicio() {
     const [searchTerm, setSearchTerm] = useState('')
     const [hasSearched, setHasSearched] = useState(false)
     const [selectedStore, setSelectedStore] = useState('steam')
     const [user, setUser] = useState<User | null>(null)
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 
-    const { games, loading, fetchDeals, STORE_MAP } = useDeals()
-    const { favorites, fetchFavorites, toggleFavorite } = useFavorites(user?.id)
+    const { games, loading, fetchDeals, STORE_MAP } = useOfertas()
+    const { favorites, fetchFavorites, toggleFavorite } = useFavoritos(user?.id)
 
     useEffect(() => {
         if (!searchTerm.trim()) {
@@ -81,7 +80,7 @@ function Home() {
 
             <div className="container mx-auto px-6 py-10 md:py-20">
                 {!hasSearched && (
-                    <StoreSelector 
+                    <SelectorTiendas 
                         storeMap={STORE_MAP} 
                         selectedStore={selectedStore} 
                         onStoreChange={handleStoreChange} 
@@ -96,7 +95,7 @@ function Home() {
                     </div>
                 )}
 
-                <GameList 
+                <ListaJuegos 
                     games={games} 
                     favorites={favorites} 
                     onToggleFavorite={handleToggleFavorite} 
@@ -113,7 +112,7 @@ function Home() {
 }
 
 
-export default Home
+export default Inicio
 
 
 

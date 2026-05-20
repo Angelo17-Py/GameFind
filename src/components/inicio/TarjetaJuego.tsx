@@ -1,13 +1,13 @@
 import React from 'react'
-import type { Game } from '../../hooks/useDeals'
+import type { Game } from '../../hooks/useOfertas'
 
-interface GameCardProps {
+interface TarjetaJuegoProps {
     game: Game
     isFavorite: boolean
     onToggleFavorite: (game: Game) => void
 }
 
-export const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFavorite }) => {
+export const TarjetaJuego: React.FC<TarjetaJuegoProps> = ({ game, isFavorite, onToggleFavorite }) => {
     return (
         <div className="group relative animate-fade">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/20 to-purple-600/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>

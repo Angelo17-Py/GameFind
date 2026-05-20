@@ -49,7 +49,7 @@ export default function Navbar() {
                         {/* Mis Favoritos + Hola */}
                         <div className="flex items-center gap-2 sm:gap-4 pr-2 sm:pr-4 border-r border-white/10">
                             <Link
-                                to="/favorites"
+                                to="/favoritos"
                                 className="flex items-center gap-2.5 p-2 sm:px-4 sm:py-2 rounded-xl bg-white/5 border border-white/10 hover:border-red-500/50 hover:bg-red-500/5 transition-all duration-300 group"
                                 aria-label={`Ver mis favoritos, tienes ${favCount} juegos guardados`}
                             >
@@ -74,7 +74,7 @@ export default function Navbar() {
                         </div>
 
                         {/* Avatar → Perfil */}
-                        <Link to="/profile" className="relative group shrink-0" aria-label="Ir a mi perfil">
+                        <Link to="/perfil" className="relative group shrink-0" aria-label="Ir a mi perfil">
                             <img
                                 src={user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`}
                                 alt=""
@@ -100,10 +100,10 @@ export default function Navbar() {
                     </>
                 ) : (
                     <>
-                        <Link to="/login" className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-medium">
+                        <Link to="/entrar" className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-medium">
                             Entrar
                         </Link>
-                        <Link to="/register" className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 font-bold shadow-lg shadow-purple-500/20 hover:brightness-110 transition-all">
+                        <Link to="/registro" className="text-xs md:text-sm px-4 md:px-6 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 font-bold shadow-lg shadow-purple-500/20 hover:brightness-110 transition-all">
                             Registrarse
                         </Link>
                     </>

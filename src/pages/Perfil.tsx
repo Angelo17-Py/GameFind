@@ -2,11 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import type { User } from '@supabase/supabase-js'
-import Navbar from '../components/Navbar'
 
 import { MainLayout } from '../components/MainLayout'
 
-function Profile() {
+function Perfil() {
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
     const [updating, setUpdating] = useState(false)
@@ -185,7 +184,7 @@ function Profile() {
                 ) : (
                     <div className="text-center py-20" aria-live="polite">
                         <h2 className="text-2xl font-bold mb-4">Debes iniciar sesión</h2>
-                        <Link to="/login" className="bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-3 rounded-xl font-bold inline-block">
+                        <Link to="/entrar" className="bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-3 rounded-xl font-bold inline-block">
                             Ir a Entrar
                         </Link>
                     </div>
@@ -196,5 +195,4 @@ function Profile() {
 }
 
 
-export default Profile
-
+export default Perfil
