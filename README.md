@@ -1,8 +1,8 @@
-# 🎮 GameFind - Portal de Comparación de Precios
+# GameFind - Portal de Comparación de Precios
 
 ¡Bienvenidos al desarrollo de **GameFind**! Este proyecto utiliza una arquitectura moderna diseñada para ofrecer una experiencia de usuario premium y un rendimiento excepcional.
 
-## 🚀 Guía de Inicio Rápido
+## Guía de Inicio Rápido
 
 Para comenzar a trabajar en el proyecto, sigue estos pasos en tu terminal:
 
@@ -33,8 +33,14 @@ npm run dev
 ```
 
 ---
+## 5. Link directo al proyecto
 
-## 🛠️ Stack Tecnológico
+https://angelo17-py.github.io/GameFind/
+
+---
+
+
+## Stack Tecnológico
 
 - **Framework:** [React 18](https://react.dev/)
 - **Build Tool:** [Vite](https://vitejs.dev/)
@@ -52,7 +58,7 @@ npm run dev
 
 ---
 
-## 🤝 Flujo de Trabajo (Para el Equipo)
+## Flujo de Trabajo (Para el Equipo)
 
 1. **Ramas (Branches):** No trabajes directamente en `master`. Crea una rama descriptiva: `feat/funcionalidad` o `fix/error`.
 2. **Commits:** Usa mensajes claros en español. Prefijos recomendados: `IMPLEMENTACION:`, `MODIFICACION:`, `FIX:`.
@@ -60,4 +66,4 @@ npm run dev
 
 ---
 
-¡Vamos a construir el mejor comparador de juegos del mercado! 🚀
+¡Vamos a construir el mejor comparador de juegos del mercado! 
