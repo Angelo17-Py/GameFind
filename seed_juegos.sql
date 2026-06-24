@@ -21,3 +21,25 @@ INSERT INTO juegos (nombre, steam_app_id, imagen_url) VALUES
 ('Sekiro: Shadows Die Twice', '814380', 'https://shared.fastly.steamstatic.com/store_images/814380/header.jpg'),
 ('Horizon Zero Dawn', '1151640', 'https://shared.fastly.steamstatic.com/store_images/1151640/header.jpg')
 ON CONFLICT (steam_app_id) DO NOTHING;
+
+-- Alias iniciales para busqueda por abreviaturas y nombres alternativos.
+-- Requiere haber ejecutado primero supabase_schema.sql o supabase_busqueda_inteligente.sql.
+INSERT INTO alias_juegos (juego_id, alias)
+SELECT j.id, alias_data.alias
+FROM juegos j
+JOIN (
+    VALUES
+        ('Grand Theft Auto V', 'GTA'),
+        ('Grand Theft Auto V', 'GTA V'),
+        ('Grand Theft Auto V', 'GTA 5'),
+        ('Red Dead Redemption 2', 'RDR2'),
+        ('Red Dead Redemption 2', 'RDR 2'),
+        ('Counter-Strike 2', 'CS2'),
+        ('Counter-Strike 2', 'CS 2'),
+        ('The Witcher 3: Wild Hunt', 'Witcher 3'),
+        ('The Witcher 3: Wild Hunt', 'TW3'),
+        ('Baldur''s Gate 3', 'BG3'),
+        ('Cyberpunk 2077', 'CP2077')
+) AS alias_data(nombre_juego, alias)
+    ON lower(j.nombre) = lower(alias_data.nombre_juego)
+ON CONFLICT (juego_id, alias) DO NOTHING;

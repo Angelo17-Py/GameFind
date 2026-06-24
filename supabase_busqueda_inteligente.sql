@@ -1,6 +1,6 @@
--- Esquema de Base de Datos para GameFind (Scraping Propio)
+-- Mejora de busqueda inteligente para una base GameFind ya existente.
+-- Ejecutar este archivo una vez en el SQL Editor de Supabase.
 
--- Extensiones para busqueda flexible: sin tildes y con similitud de texto
 CREATE EXTENSION IF NOT EXISTS unaccent;
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
@@ -26,30 +26,20 @@ RETURNS TEXT AS $$
     WHERE palabra <> '';
 $$ LANGUAGE SQL STABLE;
 
--- 1. Tabla de Tiendas
-CREATE TABLE tiendas (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(), -- QUE SEA 1,2,3
-    nombre TEXT NOT NULL UNIQUE, -- Steam, Epic Games, GOG
-    slug TEXT NOT NULL UNIQUE,   
-    url_base TEXT,
-    logo_url TEXT,
-    fecha_creacion TIMESTAMPTZ DEFAULT NOW()
-);
+ALTER TABLE juegos
+ADD COLUMN IF NOT EXISTS nombre_normalizado TEXT;
 
--- 2. Tabla de Juegos (Biblioteca Central)
-CREATE TABLE juegos (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(), -- QUE SEA 1,2,3
-    nombre TEXT NOT NULL,
-    nombre_normalizado TEXT,
-    acronimo_normalizado TEXT,
-    descripcion TEXT,
-    imagen_url TEXT,
-    steam_app_id TEXT UNIQUE, -- ID interno de Steam para la API Storefront
-    epic_slug TEXT UNIQUE,    -- Slug para buscar en Epic
-    gog_id TEXT UNIQUE,       -- ID para buscar en GOG
-    fecha_creacion TIMESTAMPTZ DEFAULT NOW(),
-    fecha_actualizacion TIMESTAMPTZ DEFAULT NOW()
-);
+ALTER TABLE juegos
+ADD COLUMN IF NOT EXISTS acronimo_normalizado TEXT;
+
+UPDATE juegos
+SET
+    nombre_normalizado = normalizar_texto_busqueda(nombre),
+    acronimo_normalizado = generar_acronimo_busqueda(nombre)
+WHERE nombre_normalizado IS NULL
+   OR nombre_normalizado <> normalizar_texto_busqueda(nombre)
+   OR acronimo_normalizado IS NULL
+   OR acronimo_normalizado <> generar_acronimo_busqueda(nombre);
 
 CREATE OR REPLACE FUNCTION actualizar_nombre_normalizado_juego()
 RETURNS TRIGGER AS $$
@@ -60,59 +50,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_nombre_normalizado_juegos ON juegos;
 CREATE TRIGGER trigger_nombre_normalizado_juegos
 BEFORE INSERT OR UPDATE OF nombre ON juegos
 FOR EACH ROW
 EXECUTE FUNCTION actualizar_nombre_normalizado_juego();
 
-CREATE INDEX idx_juegos_nombre_normalizado_trgm
+CREATE INDEX IF NOT EXISTS idx_juegos_nombre_normalizado_trgm
 ON juegos USING gin (nombre_normalizado gin_trgm_ops);
 
-CREATE INDEX idx_juegos_acronimo_normalizado_trgm
+CREATE INDEX IF NOT EXISTS idx_juegos_acronimo_normalizado_trgm
 ON juegos USING gin (acronimo_normalizado gin_trgm_ops);
 
--- 3. Tabla de Precios Actuales (Fuente para la UI)
-CREATE TABLE precios (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    juego_id UUID REFERENCES juegos(id) ON DELETE CASCADE,
-    tienda_id UUID REFERENCES tiendas(id) ON DELETE CASCADE,
-    precio_actual NUMERIC(10, 2) NOT NULL,
-    precio_original NUMERIC(10, 2),
-    descuento INTEGER DEFAULT 0,
-    moneda TEXT DEFAULT 'USD',
-    url_oferta TEXT,
-    ultima_actualizacion TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE(juego_id, tienda_id) -- Permite usar UPSERT
-);
-
--- 4. Tabla de Historial de Precios
-CREATE TABLE historial_precios (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    juego_id UUID REFERENCES juegos(id) ON DELETE CASCADE,
-    tienda_id UUID REFERENCES tiendas(id) ON DELETE CASCADE,
-    precio NUMERIC(10, 2) NOT NULL,
-    fecha_registro TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 5. Trigger para guardar historial automáticamente cuando cambie un precio
-CREATE OR REPLACE FUNCTION registrar_historial_precio()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF (TG_OP = 'INSERT') OR (OLD.precio_actual IS DISTINCT FROM NEW.precio_actual) THEN
-        INSERT INTO historial_precios (juego_id, tienda_id, precio)
-        VALUES (NEW.juego_id, NEW.tienda_id, NEW.precio_actual);
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trigger_historial_precios
-AFTER INSERT OR UPDATE ON precios
-FOR EACH ROW
-EXECUTE FUNCTION registrar_historial_precio();
-
--- 6. Alias de juegos para busquedas por abreviaturas o nombres alternativos
-CREATE TABLE alias_juegos (
+CREATE TABLE IF NOT EXISTS alias_juegos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     juego_id UUID NOT NULL REFERENCES juegos(id) ON DELETE CASCADE,
     alias TEXT NOT NULL,
@@ -129,15 +79,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_alias_normalizado_juegos ON alias_juegos;
 CREATE TRIGGER trigger_alias_normalizado_juegos
 BEFORE INSERT OR UPDATE OF alias ON alias_juegos
 FOR EACH ROW
 EXECUTE FUNCTION actualizar_alias_normalizado_juego();
 
-CREATE INDEX idx_alias_juegos_alias_normalizado_trgm
+UPDATE alias_juegos
+SET alias_normalizado = normalizar_texto_busqueda(alias)
+WHERE alias_normalizado IS NULL
+   OR alias_normalizado <> normalizar_texto_busqueda(alias);
+
+CREATE INDEX IF NOT EXISTS idx_alias_juegos_alias_normalizado_trgm
 ON alias_juegos USING gin (alias_normalizado gin_trgm_ops);
 
-CREATE INDEX idx_alias_juegos_juego_id
+CREATE INDEX IF NOT EXISTS idx_alias_juegos_juego_id
 ON alias_juegos (juego_id);
 
 CREATE OR REPLACE FUNCTION buscar_juegos(
@@ -195,9 +151,23 @@ GRANT SELECT ON tiendas TO anon, authenticated;
 GRANT SELECT ON alias_juegos TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION buscar_juegos(TEXT, INTEGER) TO anon, authenticated;
 
--- Insertar tiendas iniciales
-INSERT INTO tiendas (nombre, slug, url_base, logo_url) VALUES
-('Steam', 'steam', 'https://store.steampowered.com', 'https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg'),
-('Epic Games', 'epic', 'https://store.epicgames.com', 'https://upload.wikimedia.org/wikipedia/commons/3/31/Epic_Games_logo.svg'),
-('GOG', 'gog', 'https://www.gog.com', 'https://upload.wikimedia.org/wikipedia/commons/2/2e/GOG.com_logo.svg')
-ON CONFLICT DO NOTHING;
+INSERT INTO alias_juegos (juego_id, alias)
+SELECT j.id, alias_data.alias
+FROM juegos j
+JOIN (
+    VALUES
+        ('Grand Theft Auto V', 'GTA'),
+        ('Grand Theft Auto V', 'GTA V'),
+        ('Grand Theft Auto V', 'GTA 5'),
+        ('Red Dead Redemption 2', 'RDR2'),
+        ('Red Dead Redemption 2', 'RDR 2'),
+        ('Counter-Strike 2', 'CS2'),
+        ('Counter-Strike 2', 'CS 2'),
+        ('The Witcher 3: Wild Hunt', 'Witcher 3'),
+        ('The Witcher 3: Wild Hunt', 'TW3'),
+        ('Baldur''s Gate 3', 'BG3'),
+        ('Cyberpunk 2077', 'CP2077'),
+        ('Call of Duty', 'COD')
+) AS alias_data(nombre_juego, alias)
+    ON lower(j.nombre) = lower(alias_data.nombre_juego)
+ON CONFLICT (juego_id, alias) DO NOTHING;
